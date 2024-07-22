@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import List
 
 class SplitterRequest(BaseModel):
-    text: bytes
+    document_content: bytes
     chunk_size: int
     chunk_overlap: int
 
