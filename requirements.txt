@@ -1,0 +1,5 @@
+fastapi==0.111.1
+fitz==0.0.1.dev2
+langchain==0.2.9
+pydantic==2.8.2
+python_pptx==0.6.23
