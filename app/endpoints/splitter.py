@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from langchain.text_splitter import RecursiveCharacterTextSplitter, PythonCodeTextSplitter
 from pptx import Presentation
 import io
-import fitz
+import pymupdf
 from app.models.splitter import SplitterRequest, SplitterResponse
 
 router = APIRouter()
@@ -118,7 +118,7 @@ def process_pdf(request: SplitterRequest) -> SplitterResponse:
         An object containing a list of text chunks.
     """
     document_content = base64.b64decode(request.text)
-    pdf_document = fitz.open(stream=io.BytesIO(document_content), filetype="pdf")
+    pdf_document = pymupdf.open(stream=io.BytesIO(document_content), filetype="pdf")
     pdf_text = ""
 
     for page in pdf_document:
