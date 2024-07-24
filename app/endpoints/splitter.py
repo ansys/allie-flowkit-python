@@ -65,7 +65,7 @@ def process_ppt(request: SplitterRequest) -> SplitterResponse:
     SplitterResponse
         An object containing a list of text chunks.
     """
-    document_content = base64.b64decode(request.text)
+    document_content = base64.b64decode(request.document_content)
     ppt_document = Presentation(io.BytesIO(document_content))
     ppt_text = ""
 
@@ -95,7 +95,7 @@ def process_python_code(request: SplitterRequest) -> SplitterResponse:
     SplitterResponse
         An object containing a list of text chunks.
     """
-    document_content = base64.b64decode(request.text)
+    document_content = base64.b64decode(request.document_content)
     document_content_str = document_content.decode('utf-8')
 
     splitter = PythonCodeTextSplitter(chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap)
@@ -117,7 +117,7 @@ def process_pdf(request: SplitterRequest) -> SplitterResponse:
     SplitterResponse
         An object containing a list of text chunks.
     """
-    document_content = base64.b64decode(request.text)
+    document_content = base64.b64decode(request.document_content)
     pdf_document = pymupdf.open(stream=io.BytesIO(document_content), filetype="pdf")
     pdf_text = ""
 
