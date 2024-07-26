@@ -45,8 +45,8 @@ The main purpose of this repository is to:
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/your-username/allie-flowkit-python.git
-    cd allie-flowkit-python
+    git clone https://github.com/allie-pyflowkit.git
+    cd allie-pyflowkit
     ```
 
 2. Install the required dependencies:
@@ -69,7 +69,7 @@ The main purpose of this repository is to:
 ## Adding Custom Functions
 
 1. **Create a New Function:**
-   - Add your function code as an endpoint to a new Python file in the `app/enpoints` directory.
+   - Add your function code as an endpoint to a new Python file in the `app/endpoints` directory.
    Use the `app/endpoints/splitter.py` file and its endpoints as an example.
    Be explicit about the input and output of the function, as this will be used by the Allie Agent to call the function.
 
@@ -77,7 +77,7 @@ The main purpose of this repository is to:
    - Add the models for the input and output of the function in the `app/models` directory.
    Use the `app/models/splitter.py` file its models as an example.
    
-2. **Add the enpoints to the service:**
+2. **Add the endpoints to the service:**
    - Import your module in the `app/app.py` file and add the router to the service.
    ```python
    app.include_router(splitter.router, prefix="/custom_module", tags=["custom_module"])
