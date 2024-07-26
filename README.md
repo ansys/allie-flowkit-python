@@ -58,37 +58,57 @@ The main purpose of this repository is to:
 
 1. Start the service:
     ```sh
-    python ./app/app.py
+    uvicorn app.app:app --host 0.0.0.0 --port 8000 --workers 1
     ```
+    You can specify the host, port, and number of workers as needed.
 
-2. The service will expose the functions as REST APIs on the specified port (default: 5000).
+2. The service will expose the functions as REST APIs on the specified port (default: 8000).
 
 3. Integrate these APIs into your Allie workflows as needed.
 
 ## Adding Custom Functions
 
 1. **Create a New Function:**
-   - Add your function code to a new Python file in the `functions` directory.
+   - Add your function code as an endpoint to a new Python file in the `app/enpoints` directory.
+   Use the `app/endpoints/splitter.py` file and its endpoints as an example.
+   Be explicit about the input and output of the function, as this will be used by the Allie Agent to call the function.
+
+2. **Add the models for the function:**
+   - Add the models for the input and output of the function in the `app/models` directory.
+   Use the `app/models/splitter.py` file its models as an example.
    
-2. **Register the Function:**
-   - Import and register your function in `app.py` to expose it as a REST API.
+2. **Add the enpoints to the service:**
+   - Import your module in the `app/app.py` file and add the router to the service.
+   ```python
+   app.include_router(splitter.router, prefix="/custom_module", tags=["custom_module"])
+   ```
 
 3. **Example:**
-   ```python
-   from flask import Flask, request, jsonify
-   from functions import my_custom_function
+    ```python
+    from fastapi import FastAPI, APIRouter
+    from app.models.custom_model import CustomRequest, CustomResponse
 
-   app = Flask(__name__)
+    app = FastAPI()
+    router = APIRouter()
 
-   @app.route('/my_custom_function', methods=['POST'])
-   def my_custom_function_route():
-       input_data = request.json
-       result = my_custom_function(input_data)
-       return jsonify(result)
+    @router.post('/custom_function', response_model=CustomResponse)
+    async def custom_function(request: CustomRequest) -> CustomResponse:
+        """Endpoint for custom function.
 
-   if __name__ == '__main__':
-       app.run(port=5000)
-   ```
+        Parameters
+        ----------
+        request : CustomRequest
+            An object containing the input data required for the function.
+        
+        Returns
+        -------
+        CustomResponse
+            An object containing the output data of the function.
+        """
+        # Your custom processing logic here
+        result = ...
+        return result
+    ```
 
 ## Example Functions
 
@@ -98,9 +118,9 @@ The repository includes some standard functions prefilled by the Allie team. You
 
 We welcome contributions from all teams. To contribute:
 
-1. Fork the repository.
+1. Clone the repository.
 2. Create a new branch for your feature or bug fix.
-3. Commit your changes and push your branch to your fork.
+3. Commit your changes and push your branch to the repository.
 4. Open a pull request to merge your changes into the main repository.
 
 ---
