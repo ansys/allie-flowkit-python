@@ -1,6 +1,6 @@
-# Allie PyFlowKit
+# Allie FlowKit Python
 
-Welcome to the **Allie PyFlowKit** repository! This repository hosts Python functions similar to the [Allie FlowKit](https://github.com/ansys/allie-flowkit) and serves as a service to expose APIs for each individual external function added to it. These functions can be used to build Allie workflows, enabling a flexible and modular approach to creating and executing workflows with Allie.
+Welcome to the **Allie FlowKit Python** repository! This repository hosts Python functions similar to the [Allie FlowKit](https://github.com/ansys/allie-flowkit) and serves as a service to expose APIs for each individual external function added to it. These functions can be used to build Allie workflows, enabling a flexible and modular approach to creating and executing workflows with Allie.
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -16,7 +16,7 @@ Welcome to the **Allie PyFlowKit** repository! This repository hosts Python func
 
 ## Introduction
 
-**Allie PyFlowKit** is designed to host the code for a Python service that exposes REST APIs for each external function added to it. These functions can be seamlessly integrated into Allie workflows and executed by the Allie Agent, making it easier for teams to customize and extend their workflow capabilities.
+**Allie FlowKit Python** is designed to host the code for a Python service that exposes REST APIs for each external function added to it. These functions can be seamlessly integrated into Allie workflows and executed by the Allie Agent, making it easier for teams to customize and extend their workflow capabilities.
 
 ## Purpose
 
@@ -29,9 +29,9 @@ The main purpose of this repository is to:
 ## How It Works
 
 1. **Function Integration:** External functions are added to this repository and exposed as REST APIs.
-2. **Workflow Execution:** Allie workflows can include functions from Allie PyFlowKit.
-3. **API Calls:** When an Allie workflow includes a function from Allie PyFlowKit, the Allie Agent calls the function via REST API with the required inputs.
-4. **Function Execution:** The function is executed in Allie PyFlowKit, and the output is returned as the body of the REST response.
+2. **Workflow Execution:** Allie workflows can include functions from Allie FlowKit Python.
+3. **API Calls:** When an Allie workflow includes a function from Allie FlowKit Python, the Allie Agent calls the function via REST API with the required inputs.
+4. **Function Execution:** The function is executed in Allie FlowKit Python, and the output is returned as the body of the REST response.
 
 ## Getting Started
 
@@ -45,8 +45,8 @@ The main purpose of this repository is to:
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/allie-pyflowkit.git
-    cd allie-pyflowkit
+    git clone https://github.com/allie-flowkit-python.git
+    cd allie-flowkit-python
     ```
 
 2. Install the required dependencies:
@@ -125,4 +125,4 @@ We welcome contributions from all teams. To contribute:
 
 ---
 
-Thank you for using Allie PyFlowKit! We hope this repository helps you create powerful and flexible Allie workflows. Happy coding!
+Thank you for using Allie FlowKit Python! We hope this repository helps you create powerful and flexible Allie workflows. Happy coding!
