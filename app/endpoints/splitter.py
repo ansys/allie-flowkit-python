@@ -1,54 +1,79 @@
 import base64
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Header
 from langchain.text_splitter import RecursiveCharacterTextSplitter, PythonCodeTextSplitter
 from pptx import Presentation
 import io
 import pymupdf
 from app.models.splitter import SplitterRequest, SplitterResponse
+from app.config.config import config
 
 router = APIRouter()
 
 @router.post('/ppt', response_model=SplitterResponse)
-async def split_ppt(request: SplitterRequest) -> SplitterResponse:
+async def split_ppt(
+    request: SplitterRequest,
+    api_key: str = Header(...)
+) -> SplitterResponse:
     """Endpoint for splitting text in a PowerPoint document into chunks.
 
     Parameters
     ----------
     request : SplitterRequest
         An object containing 'document_content' in Base64, 'chunk_size', and 'chunk_overlap'.
+    api_key : str
+        The API key for authentication.
     """
+    if api_key != config.pyflowkit_api_key:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+    
     return process_ppt(request)
 
 @router.post('/py', response_model=SplitterResponse)
-async def split_py(request: SplitterRequest) -> SplitterResponse:
+async def split_py(
+    request: SplitterRequest,
+    api_key: str = Header(...)
+) -> SplitterResponse:
     """Endpoint for splitting Python code into chunks.
 
     Parameters
     ----------
     request : SplitterRequest
         An object containing 'document_content' in Base64, 'chunk_size', and 'chunk_overlap'.
+    api_key : str
+        The API key for authentication.
         
     Returns
     -------
     SplitterResponse
         An object containing a list of text chunks.
     """
+    if api_key != config.pyflowkit_api_key:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+    
     return process_python_code(request)
 
 @router.post('/pdf', response_model=SplitterResponse)
-async def split_pdf(request: SplitterRequest) -> SplitterResponse:
+async def split_pdf(
+    request: SplitterRequest,
+    api_key: str = Header(...)
+) -> SplitterResponse:
     """Endpoint for splitting text in a PDF document into chunks.
 
     Parameters
     ----------
     request : SplitterRequest
         An object containing 'document_content' in Base64, 'chunk_size', and 'chunk_overlap'.
+    api_key : str
+        The API key for authentication.
     
     Returns
     -------
     SplitterResponse
         An object containing a list of text chunks.
     """
+    if api_key != config.pyflowkit_api_key:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+    
     return process_pdf(request)
 
 
