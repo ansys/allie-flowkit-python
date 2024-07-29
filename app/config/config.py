@@ -7,8 +7,8 @@ class Config:
 
     Attributes
     ----------
-    pyflowkit_api_key : str
-        The API key for accessing the Pyflowkit service.
+    flowkit_python_api_key : str
+        The API key for accessing the Allie Flowkit Python service.
 
     Methods
     -------
@@ -28,13 +28,13 @@ class Config:
         Raises
         ------
         ValueError
-            If the 'PYFLOWKIT_API_KEY' is not found in the configuration file.
+            If the 'FLOWKIT_PYTHON_API_KEY' is not found in the configuration file.
         """
         self.config = self._load_config(config_path)
-        self.pyflowkit_api_key = self.config.get('PYFLOWKIT_API_KEY')
+        self.flowkit_python_api_key = self.config.get('FLOWKIT_PYTHON_API_KEY')
 
-        if not self.pyflowkit_api_key:
-            raise ValueError("PYFLOWKIT_API_KEY is missing in the configuration file.")
+        if not self.flowkit_python_api_key:
+            raise ValueError("FLOWKIT_PYTHON_API_KEY is missing in the configuration file.")
 
     def _load_config(self, config_path: str) -> dict:
         """

@@ -34,7 +34,7 @@ async def list_functions(api_key: str = Header(...)) -> List[EndpointInfo]:
         A list of EndpointInfo objects representing the endpoints.
     """
     # Check if the API key is valid
-    if api_key != config.pyflowkit_api_key:
+    if api_key != config.flowkit_python_api_key:
         raise HTTPException(status_code=401, detail="Invalid API key")
     
     return extract_endpoint_info(function_map, app.routes)
