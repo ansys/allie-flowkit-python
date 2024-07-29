@@ -1,6 +1,8 @@
 import inspect
 from typing import Any, Dict, List, Type, get_type_hints
 
+from fastapi import Header
+from fastapi.datastructures import Default
 from fastapi.routing import APIRoute
 from pydantic import BaseModel
 from app.models.functions import EndpointInfo, ParameterInfo
@@ -65,6 +67,9 @@ def get_parameters_info(params):
     """
     parameters_info = []
     for param in params.values():
+        # If the param is a header skip it
+        if ('alias' in str(param.default) and 'annotation' in str(param.default)):
+            continue
         if param.annotation == bytes:
             param_info = ParameterInfo(
                 name=param.name,
