@@ -1,10 +1,9 @@
 import inspect
 from typing import Any, Dict, List, Type, get_type_hints
 
+from app.models.functions import EndpointInfo, ParameterInfo
 from fastapi.routing import APIRoute
 from pydantic import BaseModel
-
-from app.models.functions import EndpointInfo, ParameterInfo
 
 
 def extract_field_type(field_info: dict):
@@ -52,9 +51,7 @@ def extract_fields_from_schema(schema: dict):
     fields = []
     properties = schema.get("properties", {})
     for field_name, field_info in properties.items():
-        fields.append(
-            ParameterInfo(name=field_name, type=extract_field_type(field_info))
-        )
+        fields.append(ParameterInfo(name=field_name, type=extract_field_type(field_info)))
     return fields
 
 

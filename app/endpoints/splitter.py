@@ -1,22 +1,18 @@
 import base64
 import io
 
-import pymupdf
-from fastapi import APIRouter, Header, HTTPException
-from langchain.text_splitter import (PythonCodeTextSplitter,
-                                     RecursiveCharacterTextSplitter)
-from pptx import Presentation
-
 from app.config._config import CONFIG
 from app.models.splitter import SplitterRequest, SplitterResponse
+from fastapi import APIRouter, Header, HTTPException
+from langchain.text_splitter import PythonCodeTextSplitter, RecursiveCharacterTextSplitter
+from pptx import Presentation
+import pymupdf
 
 router = APIRouter()
 
 
 @router.post("/ppt", response_model=SplitterResponse)
-async def split_ppt(
-    request: SplitterRequest, api_key: str = Header(...)
-) -> SplitterResponse:
+async def split_ppt(request: SplitterRequest, api_key: str = Header(...)) -> SplitterResponse:
     """Endpoint for splitting text in a PowerPoint document into chunks.
 
     Parameters
@@ -33,9 +29,7 @@ async def split_ppt(
 
 
 @router.post("/py", response_model=SplitterResponse)
-async def split_py(
-    request: SplitterRequest, api_key: str = Header(...)
-) -> SplitterResponse:
+async def split_py(request: SplitterRequest, api_key: str = Header(...)) -> SplitterResponse:
     """Endpoint for splitting Python code into chunks.
 
     Parameters
@@ -57,9 +51,7 @@ async def split_py(
 
 
 @router.post("/pdf", response_model=SplitterResponse)
-async def split_pdf(
-    request: SplitterRequest, api_key: str = Header(...)
-) -> SplitterResponse:
+async def split_pdf(request: SplitterRequest, api_key: str = Header(...)) -> SplitterResponse:
     """Endpoint for splitting text in a PDF document into chunks.
 
     Parameters
@@ -103,9 +95,7 @@ def process_ppt(request: SplitterRequest) -> SplitterResponse:
     try:
         ppt_document = Presentation(io.BytesIO(document_content))
     except Exception as e:
-        raise HTTPException(
-            status_code=400, detail=f"Error processing PowerPoint file: {str(e)}"
-        )
+        raise HTTPException(status_code=400, detail=f"Error processing PowerPoint file: {str(e)}")
 
     ppt_text = ""
     for slide in ppt_document.slides:
@@ -116,9 +106,7 @@ def process_ppt(request: SplitterRequest) -> SplitterResponse:
                         ppt_text += run.text + " "
 
     if not ppt_text:
-        raise HTTPException(
-            status_code=400, detail="No text found in PowerPoint document"
-        )
+        raise HTTPException(status_code=400, detail="No text found in PowerPoint document")
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap
@@ -186,9 +174,7 @@ def process_pdf(request: SplitterRequest) -> SplitterResponse:
     try:
         pdf_document = pymupdf.open(stream=io.BytesIO(document_content), filetype="pdf")
     except Exception as e:
-        raise HTTPException(
-            status_code=400, detail=f"Error processing PDF file: {str(e)}"
-        )
+        raise HTTPException(status_code=400, detail=f"Error processing PDF file: {str(e)}")
 
     pdf_text = ""
     for page in pdf_document:

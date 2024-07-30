@@ -38,9 +38,7 @@ class Config:
         self.flowkit_python_api_key = self._yaml.get("FLOWKIT_PYTHON_API_KEY")
 
         if not self.flowkit_python_api_key:
-            raise ValueError(
-                "FLOWKIT_PYTHON_API_KEY is missing in the configuration file."
-            )
+            raise ValueError("FLOWKIT_PYTHON_API_KEY is missing in the configuration file.")
 
     def _load_config(self, config_path: str) -> dict:
         """Read the YAML configuration file.

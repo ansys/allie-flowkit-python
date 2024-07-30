@@ -1,11 +1,10 @@
 from typing import List
 
-from fastapi import FastAPI, Header, HTTPException
-
 from app.config._config import CONFIG
 from app.endpoints import splitter
 from app.fastapi_utils import extract_endpoint_info
 from app.models.functions import EndpointInfo
+from fastapi import FastAPI, Header, HTTPException
 
 app = FastAPI()
 
