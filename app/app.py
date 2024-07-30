@@ -4,7 +4,7 @@ from fastapi import FastAPI, HTTPException, Header
 from app.endpoints import splitter
 from app.fastapi_utils import extract_endpoint_info
 from app.models.functions import EndpointInfo
-from app.config.config import config
+from app.config._config import CONFIG
 
 app = FastAPI()
 
@@ -34,7 +34,7 @@ async def list_functions(api_key: str = Header(...)) -> List[EndpointInfo]:
         A list of EndpointInfo objects representing the endpoints.
     """
     # Check if the API key is valid
-    if api_key != config.flowkit_python_api_key:
+    if api_key != CONFIG.flowkit_python_api_key:
         raise HTTPException(status_code=401, detail="Invalid API key")
     
     return extract_endpoint_info(function_map, app.routes)

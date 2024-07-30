@@ -1,8 +1,6 @@
 import inspect
 from typing import Any, Dict, List, Type, get_type_hints
 
-from fastapi import Header
-from fastapi.datastructures import Default
 from fastapi.routing import APIRoute
 from pydantic import BaseModel
 from app.models.functions import EndpointInfo, ParameterInfo
@@ -104,7 +102,7 @@ def get_return_type_info(return_type: Type[BaseModel]):
     if hasattr(return_type, 'schema'):
         schema = return_type.model_json_schema()
         return extract_fields_from_schema(schema)
-    return [ParameterInfo(name='return', type=str(return_type))]
+    return [ParameterInfo(name='return', type=str(return_type.__name__))]
 
 def extract_definitions_from_schema(schema: dict) -> Dict[str, Any]:
     """Extract definitions from a schema.

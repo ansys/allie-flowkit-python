@@ -1,5 +1,4 @@
 import yaml
-from pathlib import Path
 
 class Config:
     """
@@ -12,7 +11,7 @@ class Config:
 
     Methods
     -------
-    _read_config_file(config_path: str) -> dict
+    _load_config(config_path: str) -> dict
         Reads the YAML configuration file and returns its content as a dictionary.
     """
 
@@ -30,8 +29,8 @@ class Config:
         ValueError
             If the 'FLOWKIT_PYTHON_API_KEY' is not found in the configuration file.
         """
-        self.config = self._load_config(config_path)
-        self.flowkit_python_api_key = self.config.get('FLOWKIT_PYTHON_API_KEY')
+        self._yaml = self._load_config(config_path)
+        self.flowkit_python_api_key = self._yaml.get('FLOWKIT_PYTHON_API_KEY')
 
         if not self.flowkit_python_api_key:
             raise ValueError("FLOWKIT_PYTHON_API_KEY is missing in the configuration file.")
@@ -57,5 +56,5 @@ class Config:
             raise FileNotFoundError(f"Configuration file not found at {config_path}")
 
 # Initialize the config object
-config_path = Path("config.yaml")
-config = Config(config_path)
+config_path = "config.yaml"
+CONFIG = Config(config_path)

@@ -5,7 +5,7 @@ from pptx import Presentation
 import io
 import pymupdf
 from app.models.splitter import SplitterRequest, SplitterResponse
-from app.config.config import config
+from app.config._config import CONFIG
 
 router = APIRouter()
 
@@ -192,7 +192,7 @@ def validate_request(request: SplitterRequest, api_key: str):
         If the API key is invalid or if any of the request parameters are invalid.
     """
     # Check if the provided API key matches the expected API key
-    if api_key != config.flowkit_python_api_key:
+    if api_key != CONFIG.flowkit_python_api_key:
         raise HTTPException(status_code=401, detail="Invalid API key")
 
     # Check if document content is provided
