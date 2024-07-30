@@ -6,10 +6,11 @@ Welcome to the **Allie FlowKit Python** repository! This repository hosts Python
 - [Introduction](#introduction)
 - [Purpose](#purpose)
 - [How It Works](#how-it-works)
-- [Getting Started](#getting-started)
+- [Run locally](#run-locally)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Usage](#usage)
+- [Run as a Docker container](#run-as-a-docker-container)
 - [Adding Custom Functions](#adding-custom-functions)
 - [Example Functions](#example-functions)
 - [Contributing](#contributing)
@@ -33,7 +34,7 @@ The main purpose of this repository is to:
 3. **API Calls:** When an Allie workflow includes a function from Allie FlowKit Python, the Allie Agent calls the function via REST API with the required inputs.
 4. **Function Execution:** The function is executed in Allie FlowKit Python, and the output is returned as the body of the REST response.
 
-## Getting Started
+## Run locally
 
 ### Prerequisites
 
@@ -58,13 +59,27 @@ The main purpose of this repository is to:
 
 1. Start the service:
     ```sh
-    uvicorn app.app:app --host 0.0.0.0 --port 8000 --workers 1
+    uvicorn app.app:app --host 0.0.0.0 --port 50052 --workers 1
     ```
     You can specify the host, port, and number of workers as needed.
 
 2. The service will expose the functions as REST APIs on the specified port (default: 8000).
 
 3. Integrate these APIs into your Allie workflows as needed.
+
+## Run as a Docker container
+
+1. Build the Docker container image with the following command:
+
+```bash
+    docker build -f docker/Dockerfile . -t allie-flowkit-python:latest
+```
+
+2. Run the Docker container and expose the port on your desired endpoint. You can also specify the number of workers as needed:
+
+```bash
+    docker run -d -e WORKERS=5 --rm --name allie-flowkit-python -p 50052:50052 allie-flowkit-python:latest
+```
 
 ## Adding Custom Functions
 
@@ -123,6 +138,7 @@ The main purpose of this repository is to:
         -------
         CustomResponse
             An object containing the output data of the function.
+
         """
         # Your custom processing logic here
         result = ...
@@ -140,7 +156,7 @@ The main purpose of this repository is to:
         Parameters
         ----------
         BaseModel : pydantic.BaseModel
-        The base model for the request.
+            The base model for the request.
 
         """
 
@@ -153,7 +169,7 @@ The main purpose of this repository is to:
         Parameters
         ----------
         BaseModel : pydantic.BaseModel
-        The base model for the response.
+            The base model for the response.
 
         """
 
