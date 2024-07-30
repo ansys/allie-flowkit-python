@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 
@@ -17,15 +19,10 @@ class Config:
 
     """
 
-    def __init__(self, config_path: str):
+    def __init__(self):
         """Initialize the Config object by reading the configuration file.
         Also, check if the 'FLOWKIT_PYTHON_API_KEY' is present in the
         configuration file.
-
-        Parameters
-        ----------
-        config_path : str
-            The path to the YAML configuration file.
 
         Raises
         ------
@@ -34,6 +31,7 @@ class Config:
             configuration file.
 
         """
+        config_path = os.getenv("ALLIE_CONFIG_PATH", "config.yaml")
         self._yaml = self._load_config(config_path)
         self.flowkit_python_api_key = self._yaml.get("FLOWKIT_PYTHON_API_KEY")
 
@@ -67,5 +65,4 @@ class Config:
 
 
 # Initialize the config object
-config_path = "config.yaml"
-CONFIG = Config(config_path)
+CONFIG = Config()
