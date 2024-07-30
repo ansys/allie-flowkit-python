@@ -80,10 +80,28 @@ The main purpose of this repository is to:
 2. **Add the endpoints to the service:**
    - Import your module in the `app/app.py` file and add the router to the service.
    ```python
-   app.include_router(splitter.router, prefix="/custom_module", tags=["custom_module"])
+   app.include_router(
+       custom_endpoint.router, prefix="/custom_endpoint", tags=["custom_endpoint"]
+   )
    ```
 
-3. **Example:**
+3. **Add the function to the function map:**
+    - Add your function to the `function_map` dictionary in the `app/app.py` file.
+    ```python
+    function_map = {
+        "split_ppt": splitter.split_ppt,
+        "split_pdf": splitter.split_pdf,
+        "split_py": splitter.split_py,
+        "custom_function": custom_endpoint.custom_function,
+    }
+    ```
+
+4. **Example:**
+    - Create a new file in the `app/endpoints` directory for your function.
+    For example, create a file named `custom_endpoint.py`.
+    Add your first function to the file. Remember that it's important to explicitly define the input and output of the function. Both must be defined as Pydantic models in the `app/models` directory.
+
+    The `custom_endpoint.py` file should look like this:
     ```python
     from fastapi import FastAPI, APIRouter
     from app.models.custom_model import CustomRequest, CustomResponse
@@ -109,6 +127,57 @@ The main purpose of this repository is to:
         # Your custom processing logic here
         result = ...
         return result
+    ```
+
+    While the `app/models/custom_model.py` file should look like this:
+    ```python
+    from pydantic import BaseModel
+
+
+    class CustomRequest(BaseModel):
+        """Model for the input data required for the custom function.
+
+        Parameters
+        ----------
+        BaseModel : pydantic.BaseModel
+        The base model for the request.
+
+        """
+
+        input_data: str
+
+
+    class CustomResponse(BaseModel):
+        """Model for the output data of the custom function.
+
+        Parameters
+        ----------
+        BaseModel : pydantic.BaseModel
+        The base model for the response.
+
+        """
+
+        output_data: str
+    ```
+
+    - After adding the function and models, import the module in the `app/app.py` file and add the router to the service. The ``app/app.py`` file should look like this:
+    ```python
+    from app.endpoints import custom_endpoint
+
+    app.include_router(splitter.router, prefix="/splitter", tags=["splitter"])
+    app.include_router(
+        custom_endpoint.router, prefix="/custom_endpoint", tags=["custom_endpoint"]
+    )
+    ```
+
+    - Finally, every time you add a new function, you need to add it to the ``function_map`` dictionary in the ``app/app.py`` file. The ``function_map`` dictionary should look like this:
+    ```python
+    function_map = {
+        "split_ppt": splitter.split_ppt,
+        "split_pdf": splitter.split_pdf,
+        "split_py": splitter.split_py,
+        "custom_function": custom_endpoint.custom_function,
+    }
     ```
 
 ## Example Functions
