@@ -2,8 +2,7 @@ import yaml
 
 
 class Config:
-    """
-    A class to represent the configuration settings.
+    """Represent the configuration settings.
 
     Attributes
     ----------
@@ -13,12 +12,15 @@ class Config:
     Methods
     -------
     _load_config(config_path: str) -> dict
-        Reads the YAML configuration file and returns its content as a dictionary.
+        Read the YAML configuration file and return its content as
+        a dictionary.
+
     """
 
     def __init__(self, config_path: str):
-        """
-        Initializes the Config object by reading the configuration file and extracting the required API key.
+        """Initialize the Config object by reading the configuration file.
+        Also, check if the 'FLOWKIT_PYTHON_API_KEY' is present in the
+        configuration file.
 
         Parameters
         ----------
@@ -28,7 +30,9 @@ class Config:
         Raises
         ------
         ValueError
-            If the 'FLOWKIT_PYTHON_API_KEY' is not found in the configuration file.
+            If the 'FLOWKIT_PYTHON_API_KEY' is not found in the
+            configuration file.
+
         """
         self._yaml = self._load_config(config_path)
         self.flowkit_python_api_key = self._yaml.get("FLOWKIT_PYTHON_API_KEY")
@@ -39,8 +43,7 @@ class Config:
             )
 
     def _load_config(self, config_path: str) -> dict:
-        """
-        Reads the YAML configuration file.
+        """Read the YAML configuration file.
 
         Parameters
         ----------
@@ -51,6 +54,12 @@ class Config:
         -------
         dict
             The content of the configuration file as a dictionary.
+
+        Raises
+        ------
+        FileNotFoundError
+            If the configuration file is not found at the given path.
+
         """
         try:
             with open(config_path, "r") as file:

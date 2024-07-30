@@ -34,6 +34,7 @@ async def list_functions(api_key: str = Header(...)) -> List[EndpointInfo]:
     -------
     List[EndpointInfo]
         A list of EndpointInfo objects representing the endpoints.
+
     """
     # Check if the API key is valid
     if api_key != CONFIG.flowkit_python_api_key:

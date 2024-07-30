@@ -22,9 +22,11 @@ async def split_ppt(
     Parameters
     ----------
     request : SplitterRequest
-        An object containing 'document_content' in Base64, 'chunk_size', and 'chunk_overlap'.
+        An object containing 'document_content' in Base64,
+        'chunk_size', and 'chunk_overlap'
     api_key : str
         The API key for authentication.
+
     """
     validate_request(request, api_key)
     return process_ppt(request)
@@ -39,7 +41,8 @@ async def split_py(
     Parameters
     ----------
     request : SplitterRequest
-        An object containing 'document_content' in Base64, 'chunk_size', and 'chunk_overlap'.
+        An object containing 'document_content' in Base64,
+        'chunk_size', and 'chunk_overlap'
     api_key : str
         The API key for authentication.
 
@@ -47,6 +50,7 @@ async def split_py(
     -------
     SplitterResponse
         An object containing a list of text chunks.
+
     """
     validate_request(request, api_key)
     return process_python_code(request)
@@ -61,7 +65,8 @@ async def split_pdf(
     Parameters
     ----------
     request : SplitterRequest
-        An object containing 'document_content' in Base64, 'chunk_size', and 'chunk_overlap'.
+        An object containing 'document_content' in Base64,
+        'chunk_size', and 'chunk_overlap'.
     api_key : str
         The API key for authentication.
 
@@ -69,6 +74,7 @@ async def split_pdf(
     -------
     SplitterResponse
         An object containing a list of text chunks.
+
     """
     validate_request(request, api_key)
     return process_pdf(request)
@@ -80,12 +86,14 @@ def process_ppt(request: SplitterRequest) -> SplitterResponse:
     Parameters
     ----------
     request : SplitterRequest
-        An object containing 'document_content' in Base64, 'chunk_size', and 'chunk_overlap'.
+        An object containing 'document_content' in Base64,
+        'chunk_size', and 'chunk_overlap'
 
     Returns
     -------
     SplitterResponse
         An object containing a list of text chunks.
+
     """
     try:
         document_content = base64.b64decode(request.document_content)
@@ -127,12 +135,14 @@ def process_python_code(request: SplitterRequest) -> SplitterResponse:
     Parameters
     ----------
     request : SplitterRequest
-        An object containing 'document_content' in Base64, 'chunk_size', and 'chunk_overlap'.
+        An object containing 'document_content' in Base64,
+        'chunk_size', and 'chunk_overlap'
 
     Returns
     -------
     SplitterResponse
         An object containing a list of text chunks.
+
     """
     try:
         document_content = base64.b64decode(request.document_content)
@@ -159,12 +169,14 @@ def process_pdf(request: SplitterRequest) -> SplitterResponse:
     Parameters
     ----------
     request : SplitterRequest
-        An object containing 'document_content' in Base64, 'chunk_size', and 'chunk_overlap'.
+        An object containing 'document_content' in Base64,
+        'chunk_size', and 'chunk_overlap'
 
     Returns
     -------
     SplitterResponse
         An object containing a list of text chunks.
+
     """
     try:
         document_content = base64.b64decode(request.document_content)
@@ -200,7 +212,8 @@ def validate_request(request: SplitterRequest, api_key: str):
     Parameters
     ----------
     request : SplitterRequest
-        An object containing 'document_content', 'chunk_size', and 'chunk_overlap'.
+        An object containing 'document_content' in Base64,
+        'chunk_size', and 'chunk_overlap'
     api_key : str
         The API key for authentication.
 
@@ -208,6 +221,7 @@ def validate_request(request: SplitterRequest, api_key: str):
     ------
     HTTPException
         If the API key is invalid or if any of the request parameters are invalid.
+
     """
     # Check if the provided API key matches the expected API key
     if api_key != CONFIG.flowkit_python_api_key:

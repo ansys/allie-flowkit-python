@@ -4,11 +4,29 @@ from pydantic import BaseModel
 
 
 class ParameterInfo(BaseModel):
+    """Parameter information model.
+
+    Parameters
+    ----------
+    BaseModel : pydantic.BaseModel
+        The base model for the parameter information
+
+    """
+
     name: str
     type: str
 
 
 class EndpointInfo(BaseModel):
+    """Endpoint information model.
+
+    Parameters
+    ----------
+    BaseModel : pydantic.BaseModel
+        The base model for the endpoint information
+
+    """
+
     name: str
     path: str
     inputs: List[ParameterInfo]

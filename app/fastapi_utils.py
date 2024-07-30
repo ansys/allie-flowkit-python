@@ -19,6 +19,7 @@ def extract_field_type(field_info: dict):
     -------
     str
         The extracted field type.
+
     """
     field_type = field_info.get("type", "Unknown")
     if field_type == "array":
@@ -46,6 +47,7 @@ def extract_fields_from_schema(schema: dict):
     -------
     list
         A list of ParameterInfo objects representing the fields.
+
     """
     fields = []
     properties = schema.get("properties", {})
@@ -68,6 +70,7 @@ def get_parameters_info(params):
     -------
     list
         A list of ParameterInfo objects representing the parameters.
+
     """
     parameters_info = []
     for param in params.values():
@@ -99,6 +102,7 @@ def get_return_type_info(return_type: Type[BaseModel]):
     -------
     list
         A list of ParameterInfo objects representing the return type fields.
+
     """
     if hasattr(return_type, "schema"):
         schema = return_type.model_json_schema()
@@ -118,6 +122,7 @@ def extract_definitions_from_schema(schema: dict) -> Dict[str, Any]:
     -------
     dict
         A dictionary of definitions.
+
     """
     definitions = schema.get("$defs", {})
     return definitions
@@ -135,6 +140,7 @@ def get_definitions_from_params(params: dict) -> Dict[str, Any]:
     -------
     dict
         A dictionary of definitions extracted from the parameters.
+
     """
     definitions = {}
     for param in params.values():
@@ -156,6 +162,7 @@ def get_definitions_from_return_type(return_type: Type[BaseModel]) -> Dict[str, 
     -------
     dict
         A dictionary of definitions extracted from the return type.
+
     """
     if hasattr(return_type, "model_json_schema"):
         schema = return_type.model_json_schema()
@@ -179,6 +186,7 @@ def extract_endpoint_info(
     -------
     list
         A list of EndpointInfo objects representing the endpoints.
+
     """
     endpoint_list = []
     for route in routes:
