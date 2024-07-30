@@ -76,7 +76,7 @@ The main purpose of this repository is to:
 2. **Add the models for the function:**
    - Add the models for the input and output of the function in the `app/models` directory.
    Use the `app/models/splitter.py` file its models as an example.
-   
+
 2. **Add the endpoints to the service:**
    - Import your module in the `app/app.py` file and add the router to the service.
    ```python
@@ -91,7 +91,8 @@ The main purpose of this repository is to:
     app = FastAPI()
     router = APIRouter()
 
-    @router.post('/custom_function', response_model=CustomResponse)
+
+    @router.post("/custom_function", response_model=CustomResponse)
     async def custom_function(request: CustomRequest) -> CustomResponse:
         """Endpoint for custom function.
 
@@ -99,7 +100,7 @@ The main purpose of this repository is to:
         ----------
         request : CustomRequest
             An object containing the input data required for the function.
-        
+
         Returns
         -------
         CustomResponse

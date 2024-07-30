@@ -3,7 +3,9 @@ from typing import Any, Dict, List, Type, get_type_hints
 
 from fastapi.routing import APIRoute
 from pydantic import BaseModel
+
 from app.models.functions import EndpointInfo, ParameterInfo
+
 
 def extract_field_type(field_info: dict):
     """Extract the field type from a given schema field information.
@@ -18,18 +20,19 @@ def extract_field_type(field_info: dict):
     str
         The extracted field type.
     """
-    field_type = field_info.get('type', 'Unknown')
-    if field_type == 'array':
-        items = field_info.get('items', {})
+    field_type = field_info.get("type", "Unknown")
+    if field_type == "array":
+        items = field_info.get("items", {})
         item_type = extract_field_type(items)
-        return f'array<{item_type}>'
-    elif field_type == 'string' and field_info.get('format') == 'binary':
-        return 'string(binary)'
-    elif '$ref' in field_info and field_type == 'Unknown':
-        ref = field_info['$ref']
-        ref_name = ref.split('/')[-1]
+        return f"array<{item_type}>"
+    elif field_type == "string" and field_info.get("format") == "binary":
+        return "string(binary)"
+    elif "$ref" in field_info and field_type == "Unknown":
+        ref = field_info["$ref"]
+        ref_name = ref.split("/")[-1]
         return ref_name
     return field_type
+
 
 def extract_fields_from_schema(schema: dict):
     """Extract fields and their types from a schema.
@@ -45,10 +48,13 @@ def extract_fields_from_schema(schema: dict):
         A list of ParameterInfo objects representing the fields.
     """
     fields = []
-    properties = schema.get('properties', {})
+    properties = schema.get("properties", {})
     for field_name, field_info in properties.items():
-        fields.append(ParameterInfo(name=field_name, type=extract_field_type(field_info)))
+        fields.append(
+            ParameterInfo(name=field_name, type=extract_field_type(field_info))
+        )
     return fields
+
 
 def get_parameters_info(params):
     """Get parameter information from function parameters.
@@ -66,25 +72,20 @@ def get_parameters_info(params):
     parameters_info = []
     for param in params.values():
         # If the param is a header skip it
-        if ('alias' in str(param.default) and 'annotation' in str(param.default)):
+        if "alias" in str(param.default) and "annotation" in str(param.default):
             continue
         if param.annotation == bytes:
-            param_info = ParameterInfo(
-                name=param.name,
-                type='bytes'
-            )
+            param_info = ParameterInfo(name=param.name, type="bytes")
             parameters_info.append(param_info)
-        elif hasattr(param.annotation, 'schema'):
+        elif hasattr(param.annotation, "schema"):
             schema = param.annotation.schema()
             param_info = extract_fields_from_schema(schema)
             parameters_info.extend(param_info)
         else:
-            param_info = ParameterInfo(
-                name=param.name,
-                type=str(param.annotation)
-            )
+            param_info = ParameterInfo(name=param.name, type=str(param.annotation))
             parameters_info.append(param_info)
     return parameters_info
+
 
 def get_return_type_info(return_type: Type[BaseModel]):
     """Get return type information from the function's return type.
@@ -99,10 +100,11 @@ def get_return_type_info(return_type: Type[BaseModel]):
     list
         A list of ParameterInfo objects representing the return type fields.
     """
-    if hasattr(return_type, 'schema'):
+    if hasattr(return_type, "schema"):
         schema = return_type.model_json_schema()
         return extract_fields_from_schema(schema)
-    return [ParameterInfo(name='return', type=str(return_type.__name__))]
+    return [ParameterInfo(name="return", type=str(return_type.__name__))]
+
 
 def extract_definitions_from_schema(schema: dict) -> Dict[str, Any]:
     """Extract definitions from a schema.
@@ -117,8 +119,9 @@ def extract_definitions_from_schema(schema: dict) -> Dict[str, Any]:
     dict
         A dictionary of definitions.
     """
-    definitions = schema.get('$defs', {})
+    definitions = schema.get("$defs", {})
     return definitions
+
 
 def get_definitions_from_params(params: dict) -> Dict[str, Any]:
     """Get definitions from function parameters.
@@ -135,10 +138,11 @@ def get_definitions_from_params(params: dict) -> Dict[str, Any]:
     """
     definitions = {}
     for param in params.values():
-        if hasattr(param.annotation, 'model_json_schema'):
+        if hasattr(param.annotation, "model_json_schema"):
             schema = param.annotation.model_json_schema()
             definitions.update(extract_definitions_from_schema(schema))
     return definitions
+
 
 def get_definitions_from_return_type(return_type: Type[BaseModel]) -> Dict[str, Any]:
     """Get definitions from the function's return type.
@@ -153,12 +157,15 @@ def get_definitions_from_return_type(return_type: Type[BaseModel]) -> Dict[str, 
     dict
         A dictionary of definitions extracted from the return type.
     """
-    if hasattr(return_type, 'model_json_schema'):
+    if hasattr(return_type, "model_json_schema"):
         schema = return_type.model_json_schema()
         return extract_definitions_from_schema(schema)
     return {}
 
-def extract_endpoint_info(function_map: Dict[str, Any], routes: List[APIRoute]) -> List[EndpointInfo]:
+
+def extract_endpoint_info(
+    function_map: Dict[str, Any], routes: List[APIRoute]
+) -> List[EndpointInfo]:
     """Extract endpoint information from the given routes.
 
     Parameters
@@ -180,12 +187,14 @@ def extract_endpoint_info(function_map: Dict[str, Any], routes: List[APIRoute]) 
             if func_name in function_map:
                 signature = inspect.signature(route.endpoint)
                 inputs = get_parameters_info(signature.parameters)
-                return_type = get_type_hints(route.endpoint).get('return', None)
+                return_type = get_type_hints(route.endpoint).get("return", None)
                 outputs = get_return_type_info(return_type) if return_type else []
 
                 # Get definitions from both inputs and outputs
                 input_definitions = get_definitions_from_params(signature.parameters)
-                output_definitions = get_definitions_from_return_type(return_type) if return_type else {}
+                output_definitions = (
+                    get_definitions_from_return_type(return_type) if return_type else {}
+                )
                 definitions = {**input_definitions, **output_definitions}
 
                 endpoint_info = EndpointInfo(
@@ -193,7 +202,7 @@ def extract_endpoint_info(function_map: Dict[str, Any], routes: List[APIRoute]) 
                     path=route.path,
                     inputs=inputs,
                     outputs=outputs,
-                    definitions=definitions
+                    definitions=definitions,
                 )
                 endpoint_list.append(endpoint_info)
     return endpoint_list

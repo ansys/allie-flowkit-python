@@ -1,3 +1,3 @@
-#app/config/__init__.py
+# app/config/__init__.py
 
 from app.config._config import CONFIG

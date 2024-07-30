@@ -1,9 +1,12 @@
+from typing import Any, Dict, List
+
 from pydantic import BaseModel
-from typing import List, Dict, Any
+
 
 class ParameterInfo(BaseModel):
     name: str
     type: str
+
 
 class EndpointInfo(BaseModel):
     name: str

@@ -1,10 +1,11 @@
 from typing import List
-from fastapi import FastAPI, HTTPException, Header
 
+from fastapi import FastAPI, Header, HTTPException
+
+from app.config._config import CONFIG
 from app.endpoints import splitter
 from app.fastapi_utils import extract_endpoint_info
 from app.models.functions import EndpointInfo
-from app.config._config import CONFIG
 
 app = FastAPI()
 
@@ -18,16 +19,17 @@ function_map = {
     "split_py": splitter.split_py,
 }
 
+
 # Endpoint to list all enpoint information
 @app.get("/", response_model=List[EndpointInfo])
 async def list_functions(api_key: str = Header(...)) -> List[EndpointInfo]:
     """List all available functions and their endpoints.
-    
+
     Parameters
     ----------
     api_key : str
         The API key for authentication.
-    
+
     Returns
     -------
     List[EndpointInfo]
@@ -36,5 +38,5 @@ async def list_functions(api_key: str = Header(...)) -> List[EndpointInfo]:
     # Check if the API key is valid
     if api_key != CONFIG.flowkit_python_api_key:
         raise HTTPException(status_code=401, detail="Invalid API key")
-    
+
     return extract_endpoint_info(function_map, app.routes)
