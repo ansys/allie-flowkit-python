@@ -102,7 +102,8 @@ Allie Flowkit Python supports these actions:
 4. **Add the function to the function map:**
     - Add your function to the `function_map` dictionary in the `app/app.py` file.
 
-### Example
+### Example´
+
 1. **Create a new file for all your custom functions:**
 - In the `app/endpoints` directory, create a new Python file named `custom_endpoint.py`.
 
