@@ -1,15 +1,15 @@
 from typing import List
 
-from app.config._config import CONFIG
-from app.endpoints import splitter
-from app.fastapi_utils import extract_endpoint_info
-from app.models.functions import EndpointInfo
+from allie.flowkit.config._config import CONFIG
+from allie.flowkit.endpoints import splitter
+from allie.flowkit.fastapi_utils import extract_endpoint_info
+from allie.flowkit.models.functions import EndpointInfo
 from fastapi import FastAPI, Header, HTTPException
 
-app = FastAPI()
+flowkit_service = FastAPI()
 
 # Include routers from all endpoints
-app.include_router(splitter.router, prefix="/splitter", tags=["splitter"])
+flowkit_service.include_router(splitter.router, prefix="/splitter", tags=["splitter"])
 
 # Map of function names to function objects
 function_map = {
@@ -20,7 +20,7 @@ function_map = {
 
 
 # Endpoint to list all enpoint information
-@app.get("/", response_model=List[EndpointInfo])
+@flowkit_service.get("/", response_model=List[EndpointInfo])
 async def list_functions(api_key: str = Header(...)) -> List[EndpointInfo]:
     """List all available functions and their endpoints.
 
@@ -39,4 +39,4 @@ async def list_functions(api_key: str = Header(...)) -> List[EndpointInfo]:
     if api_key != CONFIG.flowkit_python_api_key:
         raise HTTPException(status_code=401, detail="Invalid API key")
 
-    return extract_endpoint_info(function_map, app.routes)
+    return extract_endpoint_info(function_map, flowkit_service.routes)

@@ -1,9 +1,10 @@
 import inspect
 from typing import Any, Dict, List, Type, get_type_hints
 
-from app.models.functions import EndpointInfo, ParameterInfo
 from fastapi.routing import APIRoute
 from pydantic import BaseModel
+
+from allie.flowkit.models.functions import EndpointInfo, ParameterInfo
 
 
 def extract_field_type(field_info: dict):
