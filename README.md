@@ -7,10 +7,13 @@ Welcome to Allie FlowKit Python. This repository hosts Python functions similar 
 - [Objectives](#objectives)
 - [How it works](#how-it-works)
 - [Getting started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Usage](#usage)
+    - [Run locally](#run-locally)
+        - [Prerequisites](#prerequisites)
+        - [Installation](#installation)
+        - [Usage](#usage)
+    - [Run as a Docker container](#run-as-a-docker-container)
 - [Adding custom functions](#adding-custom-functions)
+  - [Example](#example)
 - [Example functions](#example-functions)
 - [Contributing](#contributing)
 
@@ -38,13 +41,17 @@ Allie Flowkit Python supports these actions:
 
 ## Getting started
 
-### Prerequisites
+Allie FlowKit Python can be run locally or as a Docker container. Follow the instructions below to get started.
+
+### Run locally
+
+#### Prerequisites
 
 - Python 3.7 or later
 - pip (Python package installer)
 - A running instance of the Allie Flowkit
 
-### Installation
+#### Installation
 
 1. Clone the repository:
     ```sh
@@ -57,62 +64,142 @@ Allie Flowkit Python supports these actions:
     pip install -r requirements.txt
     ```
 
-### Usage
+#### Usage
 
 1. Start the service:
-   ```sh
-   uvicorn app.app:app --host 0.0.0.0 --port 8000 --workers 1
-   ```
-   You can specify the host, port, and number of workers as needed. The service exposes the functions as REST APIs on the specified port. The default is 8000.
+    ```sh
+    uvicorn app.app:app --host 0.0.0.0 --port 50052 --workers 1
+    ```
+    You can specify the host, port, and number of workers as needed.
 
-2. Integrate these APIs into your Allie workflows as needed.
+2. The service will expose the functions as REST APIs on the specified port (default: 8000).
+
+3. Integrate these APIs into your Allie workflows as needed.
+
+### Run as a Docker container
+
+1. Build the Docker container image with the following command:
+
+```bash
+    docker build -f docker/Dockerfile . -t allie-flowkit-python:latest
+```
+
+2. Run the Docker container and expose the port on your desired endpoint. You can also specify the number of workers as needed:
+
+```bash
+    docker run -d -e WORKERS=5 --rm --name allie-flowkit-python -p 50052:50052 allie-flowkit-python:latest
+```
 
 ## Adding custom functions
 
-1. **Create a function.**
+1. **Create a New Function:**
    - Add your function code as an endpoint to a new Python file in the `app/endpoints` directory.
    - Use the `app/endpoints/splitter.py` file and its endpoints as an example.
-   - Be explicit about the input and output of the function as they are used by the Allie agent
-   to call the function.
+   - Explicitly define the input and output of the function using Pydantic models, as these will be used by the Allie Agent to call the function.
 
-2. **Add the models for the function.**   
-   - Add the models for the input and output of the function in the `app/models` directory.
-   - Use the `app/models/splitter.py` file its models as an example.
-   
-2. **Add the endpoints to the service.**
-   
-   - Import your module in the `app/app.py` file.
-   - Add the router to the service:
-     ```python
-     app.include_router(splitter.router, prefix="/custom_module", tags=["custom_module"])
-     ```
+2. **Add the models for the function:**
+   - Create the models for the input and output of the function in the `app/models` directory.
+   - Use the `app/models/splitter.py` file and its models as an example.
 
-**Example**
- ```python
- from fastapi import FastAPI, APIRouter
- from app.models.custom_model import CustomRequest, CustomResponse
+3. **Add the endpoints to the service:**
+   - Import your module in the `app/app.py` file and add the router to the service.
 
- app = FastAPI()
- router = APIRouter()
+4. **Add the function to the function map:**
+    - Add your function to the `function_map` dictionary in the `app/app.py` file.
 
- @router.post('/custom_function', response_model=CustomResponse)
- async def custom_function(request: CustomRequest) -> CustomResponse:
-     """Endpoint for custom function.
+### Example´
 
-     Parameters
-     ----------
-     request : CustomRequest
-        Object containing the input data required for the function.
-        
-     Returns
-     -------
-     CustomResponse
-        Object containing the output data of the function.
-     """
-     # Your custom processing logic here
-     result = ...
-     return result
- ```
+1. **Create a new file for all your custom functions:**
+- In the `app/endpoints` directory, create a new Python file named `custom_endpoint.py`.
+
+2. **Create the models for the custom function:**
+- In the `app/models` directory, create a new Python file named `custom_model.py`.
+
+    **custom_model.py**:
+    ```python
+    from pydantic import BaseModel
+
+
+    class CustomRequest(BaseModel):
+        """Model for the input data required for the custom function.
+
+        Parameters
+        ----------
+        BaseModel : pydantic.BaseModel
+            Base model for the request.
+
+        """
+
+        input_data: str
+
+
+    class CustomResponse(BaseModel):
+        """Model for the output data of the custom function.
+
+        Parameters
+        ----------
+        BaseModel : pydantic.BaseModel
+            Base model for the response.
+
+        """
+
+        output_data: str
+    ```
+
+3. **Define your custom function:**
+- Add your function to ``custom_endpoint.py``, explicitly defining the input and output using Pydantic models.
+
+    **custom_endpoint.py**:
+    ```python
+    from fastapi import FastAPI, APIRouter
+    from app.models.custom_model import CustomRequest, CustomResponse
+
+
+    @router.post("/custom_function", response_model=CustomResponse)
+    async def custom_function(request: CustomRequest) -> CustomResponse:
+        """Endpoint for custom function.
+
+        Parameters
+        ----------
+        request : CustomRequest
+            Object containing the input data required for the function.
+
+        Returns
+        -------
+        CustomResponse
+            Object containing the output data of the function.
+
+        """
+        # Your custom processing logic here
+        result = ...
+        return result
+    ```
+
+4. **Import the module and add the router to the service:**
+- Import the module in the ``app/app.py`` file and add the router to the service.
+
+    **app.py**:
+    ```python
+    from app.endpoints import custom_endpoint
+
+    app.include_router(splitter.router, prefix="/splitter", tags=["splitter"])
+    app.include_router(
+        custom_endpoint.router, prefix="/custom_endpoint", tags=["custom_endpoint"]
+    )
+    ```
+
+5. **Add the function to the function map:**
+- Add your function to the ``function_map`` dictionary in the ``app/app.py`` file.
+
+    **app.py**:
+    ```python
+    function_map = {
+        "split_ppt": splitter.split_ppt,
+        "split_pdf": splitter.split_pdf,
+        "split_py": splitter.split_py,
+        "custom_function": custom_endpoint.custom_function,
+    }
+    ```
 
 ## Example functions
 

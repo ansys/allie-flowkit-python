@@ -1,1 +1,1 @@
-# app/endpoints/__init__.py
+"""Endpoints package responsible for defining the endpoints."""

@@ -35,3 +35,9 @@ dist/
 .vscode/
 *.sublime-project
 *.sublime-workspace
+
+# Ignore config.yaml globally
+config.yaml
+
+# Do not ignore config.yaml in the configs/ directory
+!configs/config.yaml
