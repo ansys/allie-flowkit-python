@@ -1,6 +1,6 @@
-fastapi==0.111.1
-langchain==0.2.11
+fastapi==0.112.0
+langchain==0.2.12
 pydantic==2.8.2
 pymupdf==1.24.9
-python_pptx==0.6.23
+python_pptx==1.0.1
 PyYAML==6.0.1
