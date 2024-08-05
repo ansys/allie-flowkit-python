@@ -21,12 +21,6 @@ repos:
   hooks:
   - id: flake8
 
-# - repo: https://github.com/codespell-project/codespell
-#   rev: v2.2.6
-#   hooks:
-#   - id: codespell
-#     args: ["--ignore-words", "doc/styles/config/vocabularies/ANSYS/accept.txt", "-w"]
-
 - repo: https://github.com/pycqa/pydocstyle
   rev: 6.3.0
   hooks:
@@ -43,8 +37,7 @@ repos:
   - id: check-yaml
   - id: trailing-whitespace
 
-# this validates our github workflow files
-# - repo: https://github.com/python-jsonschema/check-jsonschema
-#   rev: 0.27.3
-#   hooks:
-#     - id: check-github-workflows
+- repo: https://github.com/python-jsonschema/check-jsonschema
+  rev: 0.27.3
+  hooks:
+    - id: check-github-workflows

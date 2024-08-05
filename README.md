@@ -6,11 +6,12 @@ Welcome to Allie FlowKit Python. This repository hosts Python functions similar 
 - [Introduction](#introduction)
 - [Objectives](#objectives)
 - [How it works](#how-it-works)
-- [Run locally](#run-locally)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Usage](#usage)
-- [Run as a Docker container](#run-as-a-docker-container)
+- [Getting started](#getting-started)
+    - [Run locally](#run-locally)
+        - [Prerequisites](#prerequisites)
+        - [Installation](#installation)
+        - [Usage](#usage)
+    - [Run as a Docker container](#run-as-a-docker-container)
 - [Adding custom functions](#adding-custom-functions)
   - [Example](#example)
 - [Example functions](#example-functions)
@@ -38,15 +39,19 @@ Allie Flowkit Python supports these actions:
 3. **API calls:** When an Allie workflow includes a function from Allie FlowKit Python, the Allie agent calls the function via a REST API with the required inputs.
 4. **Function execution:** The function is executed in Allie FlowKit Python, and the output is returned as the body of the REST response.
 
-## Run locally
+## Getting started
 
-### Prerequisites
+Allie FlowKit Python can be run locally or as a Docker container. Follow the instructions below to get started.
+
+### Run locally
+
+#### Prerequisites
 
 - Python 3.7 or later
 - pip (Python package installer)
 - A running instance of the Allie Flowkit
 
-### Installation
+#### Installation
 
 1. Clone the repository:
     ```sh
@@ -59,7 +64,7 @@ Allie Flowkit Python supports these actions:
     pip install -r requirements.txt
     ```
 
-### Usage
+#### Usage
 
 1. Start the service:
     ```sh
@@ -71,7 +76,7 @@ Allie Flowkit Python supports these actions:
 
 3. Integrate these APIs into your Allie workflows as needed.
 
-## Run as a Docker container
+### Run as a Docker container
 
 1. Build the Docker container image with the following command:
 
