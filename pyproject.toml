@@ -42,7 +42,7 @@ Discussions = "https://github.com/ansys/allie-flowkit-python/discussions"
 Releases = "https://github.com/ansys/allie-flowkit-python/releases/"
 
 [project.scripts]
-allie-flowkit = "allie.flowkit.__main__:main"
+allie-flowkit-python = "allie.flowkit.__main__:main"
 
 
 [tool.flit.module]

@@ -68,7 +68,7 @@ Allie FlowKit Python can be run locally or as a Docker container. Follow the ins
 
 1. Start the service:
     ```sh
-    allie-flowkit --host 0.0.0.0 --port 50052 --workers 1
+    allie-flowkit-python --host 0.0.0.0 --port 50052 --workers 1
     ```
     You can specify the host, port, and number of workers as needed.
 
