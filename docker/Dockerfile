@@ -16,4 +16,4 @@ EXPOSE 8000
 ENV WORKERS=4
 
 # Use the environment variable in CMD
-CMD ["sh", "-c", "allie-flowkit"]
+CMD ["sh", "-c", "allie-flowkit --host 0.0.0.0 --port 8000 --workers $WORKERS"]
