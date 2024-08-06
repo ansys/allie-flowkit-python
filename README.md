@@ -59,16 +59,16 @@ Allie FlowKit Python can be run locally or as a Docker container. Follow the ins
     cd allie-flowkit-python
     ```
 
-2. Install the required dependencies:
+2. Install the project:
     ```sh
-    pip install -r requirements.txt
+    pip install .
     ```
 
 #### Usage
 
 1. Start the service:
     ```sh
-    uvicorn app.app:app --host 0.0.0.0 --port 50052 --workers 1
+    allie-flowkit --host 0.0.0.0 --port 50052 --workers 1
     ```
     You can specify the host, port, and number of workers as needed.
 

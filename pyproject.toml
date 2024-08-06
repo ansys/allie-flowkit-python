@@ -31,9 +31,16 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-    all = [
-        "uvicorn[standard] >= 0.30.5,<1",
-    ]
+all = [
+    "uvicorn[standard] >= 0.30.5,<1",
+]
+
+[project.urls]
+Source = "https://github.com/ansys/allie-flowkit-python"
+Issues = "https://github.com/ansys/allie-flowkit-python/issues"
+Discussions = "https://github.com/ansys/allie-flowkit-python/discussions"
+Releases = "https://github.com/ansys/allie-flowkit-python/releases/"
+
 [project.scripts]
 allie-flowkit = "allie.flowkit.__main__:main"
 
