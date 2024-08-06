@@ -1,9 +1,10 @@
-import pytest
-from fastapi.testclient import TestClient
 from app.app import app
+from fastapi.testclient import TestClient
+import pytest
 
 # Initialize the test client
 client = TestClient(app)
+
 
 @pytest.mark.asyncio
 async def test_list_functions():
@@ -12,7 +13,7 @@ async def test_list_functions():
     response = client.get("/", headers={"api-key": "test_api_key"})
     assert response.status_code == 200
     response_data = response.json()
-    
+
     expected_response_start = [
         {
             "name": "split_ppt",
@@ -20,12 +21,10 @@ async def test_list_functions():
             "inputs": [
                 {"name": "document_content", "type": "string(binary)"},
                 {"name": "chunk_size", "type": "integer"},
-                {"name": "chunk_overlap", "type": "integer"}
+                {"name": "chunk_overlap", "type": "integer"},
             ],
-            "outputs": [
-                {"name": "chunks", "type": "array<string>"}
-            ],
-            "definitions": {}
+            "outputs": [{"name": "chunks", "type": "array<string>"}],
+            "definitions": {},
         },
         {
             "name": "split_py",
@@ -33,12 +32,10 @@ async def test_list_functions():
             "inputs": [
                 {"name": "document_content", "type": "string(binary)"},
                 {"name": "chunk_size", "type": "integer"},
-                {"name": "chunk_overlap", "type": "integer"}
+                {"name": "chunk_overlap", "type": "integer"},
             ],
-            "outputs": [
-                {"name": "chunks", "type": "array<string>"}
-            ],
-            "definitions": {}
+            "outputs": [{"name": "chunks", "type": "array<string>"}],
+            "definitions": {},
         },
         {
             "name": "split_pdf",
@@ -46,13 +43,11 @@ async def test_list_functions():
             "inputs": [
                 {"name": "document_content", "type": "string(binary)"},
                 {"name": "chunk_size", "type": "integer"},
-                {"name": "chunk_overlap", "type": "integer"}
+                {"name": "chunk_overlap", "type": "integer"},
             ],
-            "outputs": [
-                {"name": "chunks", "type": "array<string>"}
-            ],
-            "definitions": {}
-        }
+            "outputs": [{"name": "chunks", "type": "array<string>"}],
+            "definitions": {},
+        },
     ]
 
     assert response_data[:3] == expected_response_start
@@ -61,4 +56,3 @@ async def test_list_functions():
     response = client.get("/", headers={"api-key": "invalid_api_key"})
     assert response.status_code == 401
     assert response.json() == {"detail": "Invalid API key"}
-

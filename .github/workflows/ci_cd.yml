@@ -2,7 +2,7 @@ name: CI/CD
 on:
   pull_request:
   push:
-  
+
 env:
   MAIN_PYTHON_VERSION: '3.12'
 
