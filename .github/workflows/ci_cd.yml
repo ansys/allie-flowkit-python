@@ -10,6 +10,7 @@ on:
 env:
   MAIN_PYTHON_VERSION: '3.12'
   DOCUMENTATION_CNAME: allie-flowkit-python.docs.pyansys.com
+  PACKAGE_NAME: allie-flowkit-python
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
