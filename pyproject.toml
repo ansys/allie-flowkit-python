@@ -17,7 +17,3 @@ convention = "numpy"
 [tool.mypy]
 strict = true
 ignore_missing_imports = true
-
-[tool.pytest.ini_options]
-minversion = "7.1"
-addopts = "-ra --cov=ansys.allie --cov-report html:.cov/html --cov-report xml:.cov/xml --cov-report term-missing -vv"
