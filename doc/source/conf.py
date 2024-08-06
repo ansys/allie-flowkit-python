@@ -201,7 +201,9 @@ latex_additional_files = [watermark, ansys_logo_white, ansys_logo_white_cropped]
 latex_elements = {"preamble": latex.generate_preamble(html_title)}
 
 linkcheck_exclude_documents = ["index", "getting_started/local/index", "assets"]
-
+linkcheck_ignore = [
+    "https://github.com/ansys/allie-flowkit-python/"
+]
 # -- Declare the Jinja context -----------------------------------------------
 exclude_patterns = [
     "examples/**/*.ipynb",
