@@ -1,3 +1,4 @@
+"""Module for reading the configuration settings from a YAML file."""
 import os
 
 import yaml

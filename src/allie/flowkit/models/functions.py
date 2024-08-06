@@ -1,3 +1,4 @@
+"""Module for defining the models used in the endpoints."""
 from typing import Any, Dict, List
 
 from pydantic import BaseModel

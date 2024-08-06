@@ -1,3 +1,4 @@
+"""Model for the splitter endpoint."""
 from typing import List
 
 from pydantic import BaseModel

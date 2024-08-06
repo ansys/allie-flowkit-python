@@ -1,3 +1,4 @@
+"""Utils module for FastAPI related operations."""
 import inspect
 from typing import Any, Dict, List, Type, get_type_hints
 
@@ -56,7 +57,7 @@ def extract_fields_from_schema(schema: dict):
     return fields
 
 
-def get_parameters_info(params):
+def get_parameters_info(params: dict):
     """Get parameter information from function parameters.
 
     Parameters
@@ -175,9 +176,9 @@ def extract_endpoint_info(
 
     Parameters
     ----------
-    function_map : dict
+    function_map : Dict[str, Any]
         A dictionary mapping function names to their implementations.
-    routes : list
+    routes : List[APIRoute]
         A list of APIRoute objects representing the API routes.
 
     Returns
