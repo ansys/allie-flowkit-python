@@ -71,6 +71,17 @@ jobs:
       with:
         add-pdf-html-docs-as-assets: true
 
+  package:
+    name: Package library
+    needs: [docs-build, smoke-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build library source and wheel artifacts
+        uses: ansys/actions/build-library@v6
+        with:
+          library-name: ${{ env.PACKAGE_NAME }}
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
   upload_dev_docs:
     name: Upload dev documentation
     if: github.ref == 'refs/heads/main'
