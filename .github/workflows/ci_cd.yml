@@ -2,11 +2,7 @@ name: CI/CD
 on:
   pull_request:
   push:
-    tags:
-      - "*"
-    branches:
-      - main
-
+  
 env:
   MAIN_PYTHON_VERSION: '3.12'
 
@@ -25,6 +21,40 @@ jobs:
     steps:
       - name: "Run PyAnsys code style checks"
         uses: ansys/actions/code-style@v6
+
+  tests:
+    name: "Tests"
+    runs-on: ${{ matrix.os }}
+    needs: [code-style]
+    strategy:
+      matrix:
+       os: [ubuntu-latest, windows-latest]
+       python-version: ['3.9', '3.12']
+      fail-fast: false
+    steps:
+      - name: Testing (Linux)
+        uses: ansys/actions/tests-pytest@v6
+        timeout-minutes: 12
+        if: runner.os == 'Linux'
+        with:
+          checkout: false
+          pytest-extra-args: "--cov=ansys.allie.flowkit.python --cov-report=term --cov-report=html:.cov/html --cov-report=xml:.cov/coverage.xml"
+
+      - name: Testing (Windows)
+        uses: ansys/actions/tests-pytest@v6
+        timeout-minutes: 12
+        if: runner.os == 'Windows'
+        with:
+          checkout: false
+          pytest-extra-args: "--cov=ansys.allie.flowkit.python --cov-report=term --cov-report=html:.cov/html --cov-report=xml:.cov/coverage.xml"
+
+      - name: Upload coverage results (HTML)
+        uses: actions/upload-artifact@v4
+        if: (matrix.python-version == env.MAIN_PYTHON_VERSION) && (runner.os == 'Linux')
+        with:
+          name: coverage-html
+          path: .cov/html
+          retention-days: 7
 
   release:
     name: "Release project"

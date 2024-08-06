@@ -1,19 +1,23 @@
 import base64
-from fastapi import HTTPException
-import pytest
-from fastapi.testclient import TestClient
+
 from app.app import app
 from app.endpoints.splitter import validate_request
 from app.models.splitter import SplitterRequest
+from fastapi import HTTPException
+from fastapi.testclient import TestClient
+import pytest
+
 from tests.conftest import MOCK_API_KEY
 
 # Create a test client
 client = TestClient(app)
 
+
 def encode_file_to_base64(file_path):
     """Encode a file to base64 string."""
     with open(file_path, "rb") as file:
-        return base64.b64encode(file.read()).decode('utf-8')
+        return base64.b64encode(file.read()).decode("utf-8")
+
 
 @pytest.mark.asyncio
 async def test_split_ppt():
@@ -22,18 +26,15 @@ async def test_split_ppt():
     request_payload = {
         "document_content": ppt_content_base64,
         "chunk_size": 100,
-        "chunk_overlap": 10
+        "chunk_overlap": 10,
     }
-    response = client.post(
-        "/splitter/ppt",
-        json=request_payload,
-        headers={"api-key": MOCK_API_KEY}
-    )
+    response = client.post("/splitter/ppt", json=request_payload, headers={"api-key": MOCK_API_KEY})
     if response.status_code != 200:
         print(f"Response status code: {response.status_code}")
         print(f"Response content: {response.json()}")
     assert response.status_code == 200
     assert "chunks" in response.json()
+
 
 @pytest.mark.asyncio
 async def test_split_py():
@@ -42,19 +43,12 @@ async def test_split_py():
     def hello_world():
         print("Hello, world!")
     """
-    python_code_base64 = base64.b64encode(python_code.encode()).decode('utf-8')
-    request_payload = {
-        "document_content": python_code_base64,
-        "chunk_size": 50,
-        "chunk_overlap": 5
-    }
-    response = client.post(
-        "/splitter/py",
-        json=request_payload,
-        headers={"api-key": MOCK_API_KEY}
-    )
+    python_code_base64 = base64.b64encode(python_code.encode()).decode("utf-8")
+    request_payload = {"document_content": python_code_base64, "chunk_size": 50, "chunk_overlap": 5}
+    response = client.post("/splitter/py", json=request_payload, headers={"api-key": MOCK_API_KEY})
     assert response.status_code == 200
     assert "chunks" in response.json()
+
 
 @pytest.mark.asyncio
 async def test_split_pdf():
@@ -63,69 +57,49 @@ async def test_split_pdf():
     request_payload = {
         "document_content": pdf_content_base64,
         "chunk_size": 200,
-        "chunk_overlap": 20
+        "chunk_overlap": 20,
     }
-    response = client.post(
-        "/splitter/pdf",
-        json=request_payload,
-        headers={"api-key": MOCK_API_KEY}
-    )
+    response = client.post("/splitter/pdf", json=request_payload, headers={"api-key": MOCK_API_KEY})
     assert response.status_code == 200
     assert "chunks" in response.json()
+
 
 # Define test cases for validate_request()
 validate_request_test_cases = [
     # Test case 1: valid request
     (
         SplitterRequest(
-            document_content="dGVzdA==",  # base64 for "test"
-            chunk_size=100,
-            chunk_overlap=10
+            document_content="dGVzdA==", chunk_size=100, chunk_overlap=10  # base64 for "test"
         ),
         MOCK_API_KEY,
         None,
     ),
     # Test case: invalid API key
     (
-        SplitterRequest(
-            document_content="dGVzdA==",
-            chunk_size=100,
-            chunk_overlap=10
-        ),
+        SplitterRequest(document_content="dGVzdA==", chunk_size=100, chunk_overlap=10),
         "invalid_api_key",
         HTTPException(status_code=401, detail="Invalid API key"),
     ),
     # Test case 2: missing document content
     (
-        SplitterRequest(
-            document_content="",
-            chunk_size=100,
-            chunk_overlap=10
-        ),
+        SplitterRequest(document_content="", chunk_size=100, chunk_overlap=10),
         MOCK_API_KEY,
         HTTPException(status_code=400, detail="No document content provided"),
     ),
     # Test case 4: invalid chunk size
     (
-        SplitterRequest(
-            document_content="dGVzdA==",
-            chunk_size=0,
-            chunk_overlap=10
-        ),
+        SplitterRequest(document_content="dGVzdA==", chunk_size=0, chunk_overlap=10),
         MOCK_API_KEY,
         HTTPException(status_code=400, detail="No chunk size provided"),
     ),
     # Test case 5: invalid chunk overlap
     (
-        SplitterRequest(
-            document_content="dGVzdA==",
-            chunk_size=100,
-            chunk_overlap=-1
-        ),
+        SplitterRequest(document_content="dGVzdA==", chunk_size=100, chunk_overlap=-1),
         MOCK_API_KEY,
         HTTPException(status_code=400, detail="Chunk overlap must be greater than or equal to 0"),
     ),
 ]
+
 
 @pytest.mark.parametrize("api_request, api_key, expected_exception", validate_request_test_cases)
 def test_validate_request(api_request, api_key, expected_exception):
