@@ -2,13 +2,12 @@
 import base64
 import io
 
+from allie.flowkit.config._config import CONFIG
+from allie.flowkit.models.splitter import SplitterRequest, SplitterResponse
 from fastapi import APIRouter, Header, HTTPException
 from langchain.text_splitter import PythonCodeTextSplitter, RecursiveCharacterTextSplitter
 from pptx import Presentation
 import pymupdf
-
-from allie.flowkit.config._config import CONFIG
-from allie.flowkit.models.splitter import SplitterRequest, SplitterResponse
 
 router = APIRouter()
 

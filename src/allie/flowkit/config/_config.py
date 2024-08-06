@@ -1,5 +1,6 @@
 """Module for reading the configuration settings from a YAML file."""
 import os
+from pathlib import Path
 
 import yaml
 
@@ -22,6 +23,7 @@ class Config:
 
     def __init__(self):
         """Initialize the Config object by reading the configuration file.
+
         Also, check if the 'FLOWKIT_PYTHON_API_KEY' is present in the
         configuration file.
 
@@ -59,12 +61,12 @@ class Config:
 
         """
         try:
-            with open(config_path, "r") as file:
+            with Path(config_path).open("r") as file:
                 return yaml.safe_load(file)
         except FileNotFoundError:
             print(f"Configuration file not found at: {config_path}, using default location.")
             try:
-                with open("configs/config.yaml", "r") as file:
+                with Path("configs/config.yaml").open("r") as file:
                     return yaml.safe_load(file)
             except FileNotFoundError:
                 raise FileNotFoundError("Configuration file not found at the default location.")

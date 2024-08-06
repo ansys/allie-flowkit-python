@@ -2,10 +2,9 @@
 import inspect
 from typing import Any, Dict, List, Type, get_type_hints
 
+from allie.flowkit.models.functions import EndpointInfo, ParameterInfo
 from fastapi.routing import APIRoute
 from pydantic import BaseModel
-
-from allie.flowkit.models.functions import EndpointInfo, ParameterInfo
 
 
 def extract_field_type(field_info: dict):
@@ -76,7 +75,7 @@ def get_parameters_info(params: dict):
         # If the param is a header skip it
         if "alias" in str(param.default) and "annotation" in str(param.default):
             continue
-        if param.annotation == bytes:
+        if isinstance(param.annotation, bytes):
             param_info = ParameterInfo(name=param.name, type="bytes")
             parameters_info.append(param_info)
         elif hasattr(param.annotation, "schema"):
