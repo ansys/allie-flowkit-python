@@ -69,8 +69,11 @@ class Config:
                 with Path("configs/config.yaml").open("r") as file:
                     return yaml.safe_load(file)
             except FileNotFoundError:
-                raise FileNotFoundError("Configuration file not found at the default location.")
-
+                try:
+                    with Path("../../configs/config.yaml").open("r") as file:
+                        return yaml.safe_load(file)
+                except FileNotFoundError:
+                    raise FileNotFoundError("Configuration file not found at the default location.")
 
 # Initialize the config object
 CONFIG = Config()

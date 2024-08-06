@@ -41,3 +41,7 @@ config.yaml
 
 # Do not ignore config.yaml in the configs/ directory
 !configs/config.yaml
+
+# Docs
+doc/_build/
+doc/source/api/
