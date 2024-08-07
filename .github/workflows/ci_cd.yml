@@ -49,19 +49,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Testing (Linux)
+      - name: Testing
         uses: ansys/actions/tests-pytest@v6
         timeout-minutes: 12
-        if: runner.os == 'Linux'
-        with:
-          checkout: false
-          skip-install: true
-          pytest-extra-args: "--cov=ansys.allie.flowkit.python --cov-report=term --cov-report=html:.cov/html --cov-report=xml:.cov/coverage.xml"
-
-      - name: Testing (Windows)
-        uses: ansys/actions/tests-pytest@v6
-        timeout-minutes: 12
-        if: runner.os == 'Windows'
         with:
           checkout: false
           skip-install: true
