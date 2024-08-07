@@ -77,8 +77,8 @@ def get_parameters_info(params):
         if param.annotation == bytes:
             param_info = ParameterInfo(name=param.name, type="bytes")
             parameters_info.append(param_info)
-        elif hasattr(param.annotation, "schema"):
-            schema = param.annotation.schema()
+        elif hasattr(param.annotation, "model_json_schema"):
+            schema = param.annotation.model_json_schema()
             param_info = extract_fields_from_schema(schema)
             parameters_info.extend(param_info)
         else:
@@ -101,7 +101,7 @@ def get_return_type_info(return_type: Type[BaseModel]):
         A list of ParameterInfo objects representing the return type fields.
 
     """
-    if hasattr(return_type, "schema"):
+    if hasattr(return_type, "model_json_schema"):
         schema = return_type.model_json_schema()
         return extract_fields_from_schema(schema)
     return [ParameterInfo(name="return", type=str(return_type.__name__))]
