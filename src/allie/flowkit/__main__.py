@@ -39,6 +39,5 @@ def main():
     args = parse.parse_args()
     uvicorn.run("allie.flowkit:flowkit_service", host=args.host, port=args.port, workers=args.workers)
 
-
 if __name__ == "__main__":
     main()

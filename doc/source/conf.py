@@ -105,7 +105,6 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3.11", None),
     "numpy": ("https://numpy.org/doc/stable", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/", None),
-    "pyvista": ("https://docs.pyvista.org/version/stable", None),
     "grpc": ("https://grpc.github.io/grpc/python/", None),
     "pint": ("https://pint.readthedocs.io/en/stable", None),
     "beartype": ("https://beartype.readthedocs.io/en/stable/", None),
@@ -209,7 +208,6 @@ exclude_patterns = [
     "examples/**/*.ipynb",
     "examples/**/*.py",
     "examples/**/*.md5",
-    "api/ansys/visualizer/index.rst",
 ]
 
 BUILD_API = True

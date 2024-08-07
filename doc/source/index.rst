@@ -1,15 +1,11 @@
 Allie Flowkit Python documentation |version|
 ====================================================
 
-The Allie Flowkit Python is a Python API that provides an interface between PyAnsys libraries and
-different plotting backends.
+The Allie Flowkit Python is a Python service that exposes features from Allie Flowkit to Python users. This documentation provides information on how to install and use the Allie Flowkit Python.
 
 The Allie Flowkit Python offers these main features:
 
-* Serves as an interface between PyAnsys and other plotting libraries (although only
-  `PyVista <https://docs.pyvista.org/version/stable/>`_ is supported currently).
-* Provides out-of-the box picking, viewing, and measuring functionalities.
-* Supplies an extensible class for adding custom functionalities.
+
 
 .. grid:: 1 2 2 2
 
