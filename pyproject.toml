@@ -69,7 +69,7 @@ allie-flowkit-python = "allie.flowkit.__main__:main"
 name = "allie.flowkit"
 
 [tool.pytest.ini_options]
-addopts = "--cov=ansys.allie.flowkit.python --cov-report=term --cov-report=html:.cov/html --cov-report=xml:.cov/coverage.xml"
+addopts = "--cov=allie.flowkit --cov-report=term --cov-report=html:.cov/html --cov-report=xml:.cov/coverage.xml"
 
 [tool.codespell]
 skip = "*.pyc,*.xml,*.txt,*.gif,*.png,*.jpg,*.js,*.html,*.doctree,*.ttf,*.woff,*.woff2,*.eot,*.mp4,*.inv,*.pickle,*.ipynb,flycheck*,./.git/*,./.hypothesis/*,*.yml,./docs/build/*,./docs/images/*,./dist/*,*~,.hypothesis*,./docs/source/examples/*,*cover,*.dat,*.mac"
