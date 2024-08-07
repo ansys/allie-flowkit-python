@@ -20,12 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 """Test module for list functions."""
-from app.app import app
+from allie.flowkit import flowkit_service
 from fastapi.testclient import TestClient
 import pytest
 
 # Initialize the test client
-client = TestClient(app)
+client = TestClient(flowkit_service)
 
 
 @pytest.mark.asyncio

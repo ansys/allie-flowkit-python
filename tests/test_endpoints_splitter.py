@@ -23,9 +23,9 @@
 import base64
 from pathlib import Path
 
-from app.app import app
-from app.endpoints.splitter import validate_request
-from app.models.splitter import SplitterRequest
+from allie.flowkit import flowkit_service
+from allie.flowkit.endpoints.splitter import validate_request
+from allie.flowkit.models.splitter import SplitterRequest
 from fastapi import HTTPException
 from fastapi.testclient import TestClient
 import pytest
@@ -33,7 +33,7 @@ import pytest
 from tests.conftest import MOCK_API_KEY
 
 # Create a test client
-client = TestClient(app)
+client = TestClient(flowkit_service)
 
 
 def encode_file_to_base64(file_path):
