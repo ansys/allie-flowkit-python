@@ -119,3 +119,6 @@ convention = "google"
 
 [tool.setuptools.packages.find]
 include = ["app", "docker", "configs"]
+
+[tool.pytest.ini_options]
+addopts = "--cov=ansys.allie.flowkit.python --cov-report=term --cov-report=html:.cov/html --cov-report=xml:.cov/coverage.xml"
