@@ -1,5 +1,5 @@
 Allie Flowkit Python documentation |version|
-====================================================
+=============================================
 
 The Allie Flowkit Python is a Python service that exposes features from Allie Flowkit to Python users. This documentation provides information on how to install and use the Allie Flowkit Python.
 
