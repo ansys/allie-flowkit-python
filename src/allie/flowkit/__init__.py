@@ -23,6 +23,6 @@
 """App package responsible for creating the FastAPI app."""
 import importlib.metadata as importlib_metadata
 
-__version__ = importlib_metadata.version(__name__.replace(".", "-") + "-python")
+__version__ = importlib_metadata.version("allie-flowkit-python")
 
 from allie.flowkit.flowkit_service import flowkit_service  # noqa F401
