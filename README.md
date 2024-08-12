@@ -93,27 +93,27 @@ Allie FlowKit Python can be run locally or as a Docker container. Follow the ins
 ## Adding custom functions
 
 1. **Create a New Function:**
-   - Add your function code as an endpoint to a new Python file in the `app/endpoints` directory.
-   - Use the `app/endpoints/splitter.py` file and its endpoints as an example.
+   - Add your function code as an endpoint to a new Python file in the `allie/flowkit/endpoints` directory.
+   - Use the `allie/flowkit/endpoints/splitter.py` file and its endpoints as an example.
    - Explicitly define the input and output of the function using Pydantic models, as these will be used by the Allie Agent to call the function.
 
 2. **Add the models for the function:**
-   - Create the models for the input and output of the function in the `app/models` directory.
-   - Use the `app/models/splitter.py` file and its models as an example.
+   - Create the models for the input and output of the function in the `allie/flowkit/models` directory.
+   - Use the `allie/flowkit/models/splitter.py` file and its models as an example.
 
 3. **Add the endpoints to the service:**
-   - Import your module in the `app/app.py` file and add the router to the service.
+   - Import your module in the `allie/flowkit/flowkit_service.py` file and add the router to the service.
 
 4. **Add the function to the function map:**
-    - Add your function to the `function_map` dictionary in the `app/app.py` file.
+    - Add your function to the `function_map` dictionary in the `allie/flowkit/flowkit_service.py` file.
 
 ### Example´
 
 1. **Create a new file for all your custom functions:**
-- In the `app/endpoints` directory, create a new Python file named `custom_endpoint.py`.
+- In the `allie/flowkit/endpoints` directory, create a new Python file named `custom_endpoint.py`.
 
 2. **Create the models for the custom function:**
-- In the `app/models` directory, create a new Python file named `custom_model.py`.
+- In the `allie/flowkit/models` directory, create a new Python file named `custom_model.py`.
 
     **custom_model.py**:
     ```python
@@ -152,7 +152,7 @@ Allie FlowKit Python can be run locally or as a Docker container. Follow the ins
     **custom_endpoint.py**:
     ```python
     from fastapi import FastAPI, APIRouter
-    from app.models.custom_model import CustomRequest, CustomResponse
+    from allie.flowkit.models.custom_model import CustomRequest, CustomResponse
 
 
     @router.post("/custom_function", response_model=CustomResponse)
@@ -176,22 +176,22 @@ Allie FlowKit Python can be run locally or as a Docker container. Follow the ins
     ```
 
 4. **Import the module and add the router to the service:**
-- Import the module in the ``app/app.py`` file and add the router to the service.
+- Import the module in the ``allie/flowkit/flowkit_service.py`` file and add the router to the service.
 
-    **app.py**:
+    **flowkit_service.py**:
     ```python
-    from app.endpoints import custom_endpoint
+    from allie.flowkit.endpoints import custom_endpoint
 
-    app.include_router(splitter.router, prefix="/splitter", tags=["splitter"])
-    app.include_router(
+    flowkit_servie.include_router(splitter.router, prefix="/splitter", tags=["splitter"])
+    flowkit_servie.include_router(
         custom_endpoint.router, prefix="/custom_endpoint", tags=["custom_endpoint"]
     )
     ```
 
 5. **Add the function to the function map:**
-- Add your function to the ``function_map`` dictionary in the ``app/app.py`` file.
+- Add your function to the ``function_map`` dictionary in the ``allie/flowkit/flowkit_service.py`` file.
 
-    **app.py**:
+    **flowkit_service.py**:
     ```python
     function_map = {
         "split_ppt": splitter.split_ppt,
