@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 """Module for reading the configuration settings from a YAML file."""
+
 import os
 from pathlib import Path
 
@@ -96,6 +97,7 @@ class Config:
                         return yaml.safe_load(file)
                 except FileNotFoundError:
                     raise FileNotFoundError("Configuration file not found at the default location.")
+
 
 # Initialize the config object
 CONFIG = Config()

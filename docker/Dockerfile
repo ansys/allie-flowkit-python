@@ -7,7 +7,7 @@ COPY app/ ./src/allie/flowkit/
 COPY configs/config.yaml .
 
 # Install dependencies
-RUN pip install --no-cache-dir .
+RUN pip install --no-cache-dir .[all]
 
 EXPOSE 8000
 

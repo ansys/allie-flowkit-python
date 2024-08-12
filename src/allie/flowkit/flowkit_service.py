@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 """Module for the Allie Flowkit service."""
-from typing import List
 
 from allie.flowkit.config._config import CONFIG
 from allie.flowkit.endpoints import splitter
@@ -43,8 +42,8 @@ function_map = {
 
 
 # Endpoint to list all enpoint information
-@flowkit_service.get("/", response_model=List[EndpointInfo])
-async def list_functions(api_key: str = Header(...)) -> List[EndpointInfo]:
+@flowkit_service.get("/", response_model=list[EndpointInfo])
+async def list_functions(api_key: str = Header(...)) -> list[EndpointInfo]:
     """List all available functions and their endpoints.
 
     Parameters
@@ -54,7 +53,7 @@ async def list_functions(api_key: str = Header(...)) -> List[EndpointInfo]:
 
     Returns
     -------
-    List[EndpointInfo]
+    list[EndpointInfo]
         A list of EndpointInfo objects representing the endpoints.
 
     """

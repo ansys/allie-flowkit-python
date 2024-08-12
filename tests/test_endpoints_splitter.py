@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 """Test module for the splitter endpoints."""
+
 import base64
 from pathlib import Path
 
@@ -92,7 +93,9 @@ validate_request_test_cases = [
     # Test case 1: valid request
     (
         SplitterRequest(
-            document_content="dGVzdA==", chunk_size=100, chunk_overlap=10  # base64 for "test"
+            document_content="dGVzdA==",
+            chunk_size=100,
+            chunk_overlap=10,  # base64 for "test"
         ),
         MOCK_API_KEY,
         None,

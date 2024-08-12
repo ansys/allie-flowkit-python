@@ -2,17 +2,14 @@
 
 from datetime import datetime
 import os
-from pathlib import Path
 
 from allie.flowkit import __version__
 from ansys_sphinx_theme import (
     ansys_favicon,
     ansys_logo_white,
     ansys_logo_white_cropped,
-    get_autoapi_templates_dir_relative_path,
     get_version_match,
     latex,
-    pyansys_logo_black,
     watermark,
 )
 from sphinx.builders.latex import LaTeXBuilder
@@ -28,7 +25,6 @@ cname = os.getenv("DOCUMENTATION_CNAME", default="allie-flowkit-python.docs.pyan
 switcher_version = get_version_match(__version__)
 
 # Select desired logo, theme, and declare the html title
-html_logo = pyansys_logo_black
 html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "Allie Flowkit Python"
 html_baseurl = f"https://{cname}/version/stable"
@@ -41,6 +37,7 @@ html_context = {
     "doc_path": "doc/source",
 }
 html_theme_options = {
+    "logo": "pyansys",
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
         "version_match": switcher_version,
@@ -65,8 +62,28 @@ html_theme_options = {
             "url": f"https://{cname}/version/{switcher_version}/_static/assets/download/allie-flowkit-python.pdf",  # noqa: E501
             "icon": "fa fa-file-pdf fa-fw",
         },
-    ]
+    ],
+    "ansys_sphinx_theme_autoapi": {
+        "project": "Allie Flowkit Python",
+        "output": "api",
+        "use_implicit_namespaces": True,
+        "directory": "src",
+        "keep_files": True,
+        "own_page_level": "class",
+        "type": "python",
+        "options": [
+            "members",
+            "undoc-members",
+            "show-inheritance",
+            "show-module-summary",
+            "special-members",
+        ],
+        "class_content": "class",
+    },
 }
+
+suppress_warnings = ["autoapi.python_import_resolution", "design.grid", "config.cache", "autoapi.not_readable"]
+
 
 # Sphinx extensions
 extensions = [
@@ -76,6 +93,7 @@ extensions = [
     "sphinx_jinja",
     "autoapi.extension",
     "numpydoc",
+    "ansys_sphinx_theme.extension.autoapi",
 ]
 
 nbsphinx_execute = "always"
@@ -148,46 +166,6 @@ source_suffix = {
 # The master toctree document.
 master_doc = "index"
 
-# Configuration for Sphinx autoapi
-autoapi_type = "python"
-autoapi_dirs = ["../../src"]
-autoapi_root = "api"
-autoapi_template_dir = get_autoapi_templates_dir_relative_path(Path(__file__))
-suppress_warnings = ["autoapi.python_import_resolution", "design.grid", "config.cache",  "autoapi.not_readable"]
-autoapi_python_use_implicit_namespaces = True
-autoapi_keep_files = True
-autoapi_own_page_level = "class"
-autoapi_add_toctree_entry = False
-# Examples gallery customization
-nbsphinx_execute = "always"
-
-nbsphinx_epilog = """
-----
-
-.. admonition:: Download this example
-
-    Download this example as a `Jupyter Notebook <{cname_pref}/{ipynb_file_loc}>`_
-    or as a `Python script <{cname_pref}/{py_file_loc}>`_.
-
-""".format(
-    cname_pref=f"https://{cname}/version/{switcher_version}",
-    ipynb_file_loc="{{ env.docname }}.ipynb",
-    py_file_loc="{{ env.docname }}.py",
-)
-
-nbsphinx_prolog = """
-
-.. admonition:: Download this example
-
-    Download this example as a `Jupyter Notebook <{cname_pref}/{ipynb_file_loc}>`_
-    or as a `Python script <{cname_pref}/{py_file_loc}>`_.
-
-----
-""".format(
-    cname_pref=f"https://{cname}/version/{switcher_version}",
-    ipynb_file_loc="{{ env.docname }}.ipynb",
-    py_file_loc="{{ env.docname }}.py",
-)
 
 typehints_defaults = "comma"
 simplify_optional_unions = False
@@ -200,9 +178,7 @@ latex_additional_files = [watermark, ansys_logo_white, ansys_logo_white_cropped]
 latex_elements = {"preamble": latex.generate_preamble(html_title)}
 
 linkcheck_exclude_documents = ["index", "getting_started/local/index", "assets"]
-linkcheck_ignore = [
-    "https://github.com/ansys/allie-flowkit-python/"
-]
+linkcheck_ignore = ["https://github.com/ansys/allie-flowkit-python/"]
 # -- Declare the Jinja context -----------------------------------------------
 exclude_patterns = [
     "examples/**/*.ipynb",

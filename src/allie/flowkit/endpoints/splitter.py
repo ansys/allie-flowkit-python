@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 """Module for splitting text into chunks."""
+
 import base64
 import io
 
@@ -131,9 +132,7 @@ def process_ppt(request: SplitterRequest) -> SplitterResponse:
     if not ppt_text:
         raise HTTPException(status_code=400, detail="No text found in PowerPoint document")
 
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap
-    )
+    splitter = RecursiveCharacterTextSplitter(chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap)
     chunks = splitter.split_text(ppt_text)
     response = SplitterResponse(chunks=chunks)
 
@@ -165,9 +164,7 @@ def process_python_code(request: SplitterRequest) -> SplitterResponse:
     except UnicodeDecodeError:
         raise HTTPException(status_code=400, detail="Error decoding Python code")
 
-    splitter = PythonCodeTextSplitter(
-        chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap
-    )
+    splitter = PythonCodeTextSplitter(chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap)
     chunks = splitter.split_text(document_content_str)
     response = SplitterResponse(chunks=chunks)
 
@@ -206,9 +203,7 @@ def process_pdf(request: SplitterRequest) -> SplitterResponse:
     if not pdf_text:
         raise HTTPException(status_code=400, detail="No text found in PDF document")
 
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap
-    )
+    splitter = RecursiveCharacterTextSplitter(chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap)
     chunks = splitter.split_text(pdf_text)
     response = SplitterResponse(chunks=chunks)
 
@@ -250,6 +245,4 @@ def validate_request(request: SplitterRequest, api_key: str):
 
     # Check if chunk overlap is greater than or equal to 0
     if request.chunk_overlap < 0:
-        raise HTTPException(
-            status_code=400, detail="Chunk overlap must be greater than or equal to 0"
-        )
+        raise HTTPException(status_code=400, detail="Chunk overlap must be greater than or equal to 0")

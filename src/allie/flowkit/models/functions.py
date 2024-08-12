@@ -21,7 +21,8 @@
 # SOFTWARE.
 
 """Module for defining the models used in the endpoints."""
-from typing import Any, Dict, List
+
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -52,6 +53,6 @@ class EndpointInfo(BaseModel):
 
     name: str
     path: str
-    inputs: List[ParameterInfo]
-    outputs: List[ParameterInfo]
-    definitions: Dict[str, Any]
+    inputs: list[ParameterInfo]
+    outputs: list[ParameterInfo]
+    definitions: dict[str, Any]

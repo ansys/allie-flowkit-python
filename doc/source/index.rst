@@ -65,7 +65,7 @@ The Allie Flowkit Python offers these main features:
        getting_started/index
        user_guide/index
        {% if build_api %}
-       api/src/allie/flowkit/index
+       api/index
        {% endif %}
        {% if build_examples %}
        examples/index

@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 """Model for the splitter endpoint."""
-from typing import List
 
 from pydantic import BaseModel
 
@@ -51,4 +50,4 @@ class SplitterResponse(BaseModel):
 
     """
 
-    chunks: List[str]
+    chunks: list[str]

@@ -21,8 +21,9 @@
 # SOFTWARE.
 
 """Utils module for FastAPI related operations."""
+
 import inspect
-from typing import Any, Dict, List, Type, get_type_hints
+from typing import Any, get_type_hints
 
 from allie.flowkit.models.functions import EndpointInfo, ParameterInfo
 from fastapi.routing import APIRoute
@@ -110,12 +111,12 @@ def get_parameters_info(params: dict):
     return parameters_info
 
 
-def get_return_type_info(return_type: Type[BaseModel]):
+def get_return_type_info(return_type: type[BaseModel]):
     """Get return type information from the function's return type.
 
     Parameters
     ----------
-    return_type : Type[BaseModel]
+    return_type : type[BaseModel]
         The return type of the function.
 
     Returns
@@ -130,7 +131,7 @@ def get_return_type_info(return_type: Type[BaseModel]):
     return [ParameterInfo(name="return", type=str(return_type.__name__))]
 
 
-def extract_definitions_from_schema(schema: dict) -> Dict[str, Any]:
+def extract_definitions_from_schema(schema: dict) -> dict[str, Any]:
     """Extract definitions from a schema.
 
     Parameters
@@ -148,7 +149,7 @@ def extract_definitions_from_schema(schema: dict) -> Dict[str, Any]:
     return definitions
 
 
-def get_definitions_from_params(params: dict) -> Dict[str, Any]:
+def get_definitions_from_params(params: dict) -> dict[str, Any]:
     """Get definitions from function parameters.
 
     Parameters
@@ -170,12 +171,12 @@ def get_definitions_from_params(params: dict) -> Dict[str, Any]:
     return definitions
 
 
-def get_definitions_from_return_type(return_type: Type[BaseModel]) -> Dict[str, Any]:
+def get_definitions_from_return_type(return_type: type[BaseModel]) -> dict[str, Any]:
     """Get definitions from the function's return type.
 
     Parameters
     ----------
-    return_type : Type[BaseModel]
+    return_type : type[BaseModel]
         The return type of the function.
 
     Returns
@@ -190,16 +191,14 @@ def get_definitions_from_return_type(return_type: Type[BaseModel]) -> Dict[str, 
     return {}
 
 
-def extract_endpoint_info(
-    function_map: Dict[str, Any], routes: List[APIRoute]
-) -> List[EndpointInfo]:
+def extract_endpoint_info(function_map: dict[str, Any], routes: list[APIRoute]) -> list[EndpointInfo]:
     """Extract endpoint information from the given routes.
 
     Parameters
     ----------
-    function_map : Dict[str, Any]
+    function_map : dict[str, Any]
         A dictionary mapping function names to their implementations.
-    routes : List[APIRoute]
+    routes : list[APIRoute]
         A list of APIRoute objects representing the API routes.
 
     Returns
@@ -220,9 +219,7 @@ def extract_endpoint_info(
 
                 # Get definitions from both inputs and outputs
                 input_definitions = get_definitions_from_params(signature.parameters)
-                output_definitions = (
-                    get_definitions_from_return_type(return_type) if return_type else {}
-                )
+                output_definitions = get_definitions_from_return_type(return_type) if return_type else {}
                 definitions = {**input_definitions, **output_definitions}
 
                 endpoint_info = EndpointInfo(
