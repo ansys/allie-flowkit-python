@@ -9,7 +9,7 @@ on:
 
 env:
   MAIN_PYTHON_VERSION: '3.12'
-  DOCUMENTATION_CNAME: allie-flowkit-python.docs.pyansys.com
+  DOCUMENTATION_CNAME: expert-adventure-nvnoo1y.pages.github.io
   PACKAGE_NAME: allie-flowkit-python
 
 concurrency:
@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: PyAnsys documentation style checks
-        uses: ansys/actions/doc-style@v6
+        uses: ansys/actions/doc-style@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -63,8 +63,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [docs-style]
     steps:
-    - name: Setup headless display
-      uses: pyvista/setup-headless-display-action@v2
 
     - name: "Run Ansys documentation building action"
       uses: ansys/actions/doc-build@v6
