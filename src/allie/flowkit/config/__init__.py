@@ -19,18 +19,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-"""Module for test helper functions."""
 
-from unittest.mock import patch
+"""Configuration package for the application."""
 
-import pytest
-
-# Mock API key for testing
-MOCK_API_KEY = "test_api_key"
-
-
-@pytest.fixture(autouse=True)
-def mock_api_key():
-    """Mock the API key for testing."""
-    with patch("allie.flowkit.config.CONFIG.flowkit_python_api_key", MOCK_API_KEY):
-        yield
+from allie.flowkit.config._config import CONFIG  # noqa F401

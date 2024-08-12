@@ -19,18 +19,35 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-"""Module for test helper functions."""
 
-from unittest.mock import patch
+"""Model for the splitter endpoint."""
 
-import pytest
-
-# Mock API key for testing
-MOCK_API_KEY = "test_api_key"
+from pydantic import BaseModel
 
 
-@pytest.fixture(autouse=True)
-def mock_api_key():
-    """Mock the API key for testing."""
-    with patch("allie.flowkit.config.CONFIG.flowkit_python_api_key", MOCK_API_KEY):
-        yield
+class SplitterRequest(BaseModel):
+    """Request model for the splitter endpoint.
+
+    Parameters
+    ----------
+    BaseModel : pydantic.BaseModel
+        The base model for the request.
+
+    """
+
+    document_content: bytes
+    chunk_size: int
+    chunk_overlap: int
+
+
+class SplitterResponse(BaseModel):
+    """Response model for the splitter endpoint.
+
+    Parameters
+    ----------
+    BaseModel : pydantic.BaseModel
+        The base model for the response.
+
+    """
+
+    chunks: list[str]

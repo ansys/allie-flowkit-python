@@ -1,7 +1,31 @@
-import inspect
-from typing import Any, Dict, List, Type, get_type_hints
+# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
-from app.models.functions import EndpointInfo, ParameterInfo
+"""Utils module for FastAPI related operations."""
+
+import inspect
+from typing import Any, get_type_hints
+
+from allie.flowkit.models.functions import EndpointInfo, ParameterInfo
 from fastapi.routing import APIRoute
 from pydantic import BaseModel
 
@@ -55,7 +79,7 @@ def extract_fields_from_schema(schema: dict):
     return fields
 
 
-def get_parameters_info(params):
+def get_parameters_info(params: dict):
     """Get parameter information from function parameters.
 
     Parameters
@@ -74,7 +98,7 @@ def get_parameters_info(params):
         # If the param is a header skip it
         if "alias" in str(param.default) and "annotation" in str(param.default):
             continue
-        if param.annotation == bytes:
+        if isinstance(param.annotation, bytes):
             param_info = ParameterInfo(name=param.name, type="bytes")
             parameters_info.append(param_info)
         elif hasattr(param.annotation, "model_json_schema"):
@@ -87,12 +111,12 @@ def get_parameters_info(params):
     return parameters_info
 
 
-def get_return_type_info(return_type: Type[BaseModel]):
+def get_return_type_info(return_type: type[BaseModel]):
     """Get return type information from the function's return type.
 
     Parameters
     ----------
-    return_type : Type[BaseModel]
+    return_type : type[BaseModel]
         The return type of the function.
 
     Returns
@@ -107,7 +131,7 @@ def get_return_type_info(return_type: Type[BaseModel]):
     return [ParameterInfo(name="return", type=str(return_type.__name__))]
 
 
-def extract_definitions_from_schema(schema: dict) -> Dict[str, Any]:
+def extract_definitions_from_schema(schema: dict) -> dict[str, Any]:
     """Extract definitions from a schema.
 
     Parameters
@@ -125,7 +149,7 @@ def extract_definitions_from_schema(schema: dict) -> Dict[str, Any]:
     return definitions
 
 
-def get_definitions_from_params(params: dict) -> Dict[str, Any]:
+def get_definitions_from_params(params: dict) -> dict[str, Any]:
     """Get definitions from function parameters.
 
     Parameters
@@ -147,12 +171,12 @@ def get_definitions_from_params(params: dict) -> Dict[str, Any]:
     return definitions
 
 
-def get_definitions_from_return_type(return_type: Type[BaseModel]) -> Dict[str, Any]:
+def get_definitions_from_return_type(return_type: type[BaseModel]) -> dict[str, Any]:
     """Get definitions from the function's return type.
 
     Parameters
     ----------
-    return_type : Type[BaseModel]
+    return_type : type[BaseModel]
         The return type of the function.
 
     Returns
@@ -167,16 +191,14 @@ def get_definitions_from_return_type(return_type: Type[BaseModel]) -> Dict[str, 
     return {}
 
 
-def extract_endpoint_info(
-    function_map: Dict[str, Any], routes: List[APIRoute]
-) -> List[EndpointInfo]:
+def extract_endpoint_info(function_map: dict[str, Any], routes: list[APIRoute]) -> list[EndpointInfo]:
     """Extract endpoint information from the given routes.
 
     Parameters
     ----------
-    function_map : dict
+    function_map : dict[str, Any]
         A dictionary mapping function names to their implementations.
-    routes : list
+    routes : list[APIRoute]
         A list of APIRoute objects representing the API routes.
 
     Returns
@@ -197,9 +219,7 @@ def extract_endpoint_info(
 
                 # Get definitions from both inputs and outputs
                 input_definitions = get_definitions_from_params(signature.parameters)
-                output_definitions = (
-                    get_definitions_from_return_type(return_type) if return_type else {}
-                )
+                output_definitions = get_definitions_from_return_type(return_type) if return_type else {}
                 definitions = {**input_definitions, **output_definitions}
 
                 endpoint_info = EndpointInfo(

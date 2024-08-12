@@ -1,8 +1,32 @@
+# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+"""Module for splitting text into chunks."""
+
 import base64
 import io
 
-from app.config._config import CONFIG
-from app.models.splitter import SplitterRequest, SplitterResponse
+from allie.flowkit.config._config import CONFIG
+from allie.flowkit.models.splitter import SplitterRequest, SplitterResponse
 from fastapi import APIRouter, Header, HTTPException
 from langchain.text_splitter import PythonCodeTextSplitter, RecursiveCharacterTextSplitter
 from pptx import Presentation
@@ -108,9 +132,7 @@ def process_ppt(request: SplitterRequest) -> SplitterResponse:
     if not ppt_text:
         raise HTTPException(status_code=400, detail="No text found in PowerPoint document")
 
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap
-    )
+    splitter = RecursiveCharacterTextSplitter(chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap)
     chunks = splitter.split_text(ppt_text)
     response = SplitterResponse(chunks=chunks)
 
@@ -142,9 +164,7 @@ def process_python_code(request: SplitterRequest) -> SplitterResponse:
     except UnicodeDecodeError:
         raise HTTPException(status_code=400, detail="Error decoding Python code")
 
-    splitter = PythonCodeTextSplitter(
-        chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap
-    )
+    splitter = PythonCodeTextSplitter(chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap)
     chunks = splitter.split_text(document_content_str)
     response = SplitterResponse(chunks=chunks)
 
@@ -183,9 +203,7 @@ def process_pdf(request: SplitterRequest) -> SplitterResponse:
     if not pdf_text:
         raise HTTPException(status_code=400, detail="No text found in PDF document")
 
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap
-    )
+    splitter = RecursiveCharacterTextSplitter(chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap)
     chunks = splitter.split_text(pdf_text)
     response = SplitterResponse(chunks=chunks)
 
@@ -227,6 +245,4 @@ def validate_request(request: SplitterRequest, api_key: str):
 
     # Check if chunk overlap is greater than or equal to 0
     if request.chunk_overlap < 0:
-        raise HTTPException(
-            status_code=400, detail="Chunk overlap must be greater than or equal to 0"
-        )
+        raise HTTPException(status_code=400, detail="Chunk overlap must be greater than or equal to 0")

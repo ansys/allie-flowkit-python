@@ -19,18 +19,25 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-"""Module for test helper functions."""
 
-from unittest.mock import patch
+"""Main module for the FlowKit service."""
 
-import pytest
+try:
+    import uvicorn
+except ImportError:
+    raise ImportError("Please install uvicorn to run the service: pip install allie-flowkit-python[all]")
+import argparse
 
-# Mock API key for testing
-MOCK_API_KEY = "test_api_key"
+
+def main():
+    """Run entrypoint for the FlowKit service."""
+    parse = argparse.ArgumentParser()
+    parse.add_argument("--host", type=str, default="0.0.0.0", help="The host to run the service on. By default 0.0.0.0")
+    parse.add_argument("--port", type=int, default=8000, help="The port to run the service on. By default 8000")
+    parse.add_argument("--workers", type=int, default=4, help="The number of workers to use. By default 4")
+    args = parse.parse_args()
+    uvicorn.run("allie.flowkit:flowkit_service", host=args.host, port=args.port, workers=args.workers)
 
 
-@pytest.fixture(autouse=True)
-def mock_api_key():
-    """Mock the API key for testing."""
-    with patch("allie.flowkit.config.CONFIG.flowkit_python_api_key", MOCK_API_KEY):
-        yield
+if __name__ == "__main__":
+    main()
