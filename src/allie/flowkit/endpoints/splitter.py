@@ -203,7 +203,7 @@ def process_pdf(request: SplitterRequest) -> SplitterResponse:
         pdf_text = extract_text(io.BytesIO(document_content))
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error processing PDF file: {str(e)}")
-    
+
     if not pdf_text:
         raise HTTPException(status_code=400, detail="No text found in PDF document")
 
