@@ -29,8 +29,10 @@ from allie.flowkit.config._config import CONFIG
 from allie.flowkit.models.splitter import SplitterRequest, SplitterResponse
 from fastapi import APIRouter, Header, HTTPException
 from langchain.text_splitter import PythonCodeTextSplitter, RecursiveCharacterTextSplitter
+from pdfminer.high_level import extract_text
 from pptx import Presentation
-import pymupdf
+
+TOKEN_TO_CHARACTER_MULTIPLIER = 4
 
 router = APIRouter()
 
@@ -132,7 +134,10 @@ def process_ppt(request: SplitterRequest) -> SplitterResponse:
     if not ppt_text:
         raise HTTPException(status_code=400, detail="No text found in PowerPoint document")
 
-    splitter = RecursiveCharacterTextSplitter(chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap)
+    chunk_size_langchain = request.chunk_size * TOKEN_TO_CHARACTER_MULTIPLIER
+    chunk_overlap_langchain = request.chunk_overlap * TOKEN_TO_CHARACTER_MULTIPLIER
+
+    splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size_langchain, chunk_overlap=chunk_overlap_langchain)
     chunks = splitter.split_text(ppt_text)
     response = SplitterResponse(chunks=chunks)
 
@@ -164,7 +169,10 @@ def process_python_code(request: SplitterRequest) -> SplitterResponse:
     except UnicodeDecodeError:
         raise HTTPException(status_code=400, detail="Error decoding Python code")
 
-    splitter = PythonCodeTextSplitter(chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap)
+    chunk_size_langchain = request.chunk_size * TOKEN_TO_CHARACTER_MULTIPLIER
+    chunk_overlap_langchain = request.chunk_overlap * TOKEN_TO_CHARACTER_MULTIPLIER
+
+    splitter = PythonCodeTextSplitter(chunk_size=chunk_size_langchain, chunk_overlap=chunk_overlap_langchain)
     chunks = splitter.split_text(document_content_str)
     response = SplitterResponse(chunks=chunks)
 
@@ -192,18 +200,17 @@ def process_pdf(request: SplitterRequest) -> SplitterResponse:
         raise HTTPException(status_code=400, detail="Invalid Base64 encoding")
 
     try:
-        pdf_document = pymupdf.open(stream=io.BytesIO(document_content), filetype="pdf")
+        pdf_text = extract_text(io.BytesIO(document_content))
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error processing PDF file: {str(e)}")
-
-    pdf_text = ""
-    for page in pdf_document:
-        pdf_text += page.get_text()
-
+    
     if not pdf_text:
         raise HTTPException(status_code=400, detail="No text found in PDF document")
 
-    splitter = RecursiveCharacterTextSplitter(chunk_size=request.chunk_size, chunk_overlap=request.chunk_overlap)
+    chunk_size_langchain = request.chunk_size * TOKEN_TO_CHARACTER_MULTIPLIER
+    chunk_overlap_langchain = request.chunk_overlap * TOKEN_TO_CHARACTER_MULTIPLIER
+
+    splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size_langchain, chunk_overlap=chunk_overlap_langchain)
     chunks = splitter.split_text(pdf_text)
     response = SplitterResponse(chunks=chunks)
 
