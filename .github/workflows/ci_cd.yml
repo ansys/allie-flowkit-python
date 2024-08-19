@@ -9,7 +9,7 @@ on:
 
 env:
   MAIN_PYTHON_VERSION: '3.12'
-  DOCUMENTATION_CNAME: expert-adventure-nvnoo1y.pages.github.io
+  DOCUMENTATION_CNAME: ansys.github.io/allie-flowkit-python
   PACKAGE_NAME: allie-flowkit-python
 
 concurrency:
