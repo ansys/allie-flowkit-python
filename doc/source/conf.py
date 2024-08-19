@@ -21,7 +21,7 @@ project = "allie-flowkit-python"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = __version__
-cname = os.getenv("DOCUMENTATION_CNAME", default="expert-adventure-nvnoo1y.pages.github.io")
+cname = os.getenv("DOCUMENTATION_CNAME", default="ansys.github.io/allie-flowkit-python")
 switcher_version = get_version_match(__version__)
 
 # Select desired logo, theme, and declare the html title
