@@ -14,10 +14,10 @@ COPY configs/config.yaml /app
 RUN echo $(ls)
 RUN pip install --no-cache-dir .[all]
 
-EXPOSE 8000
+EXPOSE 50052
 
 # Set default number of workers
 ENV WORKERS=4
 
 # Use the environment variable in CMD
-CMD ["sh", "-c", "allie-flowkit-python --host 0.0.0.0 --port 8000 --workers $WORKERS"]
+CMD ["sh", "-c", "allie-flowkit-python --host 0.0.0.0 --port 50052 --workers $WORKERS"]

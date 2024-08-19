@@ -191,36 +191,3 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.ref_name }}
-
-  main-repo-release:
-    name: Update main allie repo and create release
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [release-docker, release]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout allie repository
-        run: |
-          git clone --branch main https://${{ secrets.ALLIE_RELEASE_TOKEN }}@github.com/ansys-internal/allie.git
-
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: 'allie/scripts/releasehelper/go.mod'
-
-      - name: Run tag script
-        run: |
-          cd allie/scripts/releasehelper
-          go run main.go "tag" ${{ github.ref_name }} ${{ secrets.ALLIE_RELEASE_TOKEN }}
-
-      - name: Commit and push to allie
-        run: |
-          cd allie
-          git config --global user.email '${{ github.actor }}@users.noreply.github.com'
-          git config --global user.name '${{ github.actor }}'
-          git commit -a -m 'New release triggered by ${{ github.event.repository.name }}'
-          git push origin main
-
-      - name: Run release script
-        run: |
-          cd allie/scripts/releasehelper
-          go run main.go "release" ${{ github.ref_name }} ${{ secrets.ALLIE_RELEASE_TOKEN }}
