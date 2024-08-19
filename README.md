@@ -72,7 +72,7 @@ Allie FlowKit Python can be run locally or as a Docker container. Follow the ins
     ```
     You can specify the host, port, and number of workers as needed.
 
-2. The service will expose the functions as REST APIs on the specified port (default: 8000).
+2. The service will expose the functions as REST APIs on the specified port (default: 50052).
 
 3. Integrate these APIs into your Allie workflows as needed.
 
