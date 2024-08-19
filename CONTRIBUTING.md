@@ -7,4 +7,4 @@ allie-flowkit-python. For contributing to this project, please refer to the
 [Contributing] section of this project's documentation.
 
 [PyAnsys Developer's Guide]: https://dev.docs.pyansys.com/index.html
-[Contributing]: https://ansys.github.io/allie-flowkit-python/dev/contributing.html
+[Contributing]: https://ansys.github.io/allie-flowkit-python/version/dev/contributing.html
