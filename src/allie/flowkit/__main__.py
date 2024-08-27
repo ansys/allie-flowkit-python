@@ -37,22 +37,20 @@ def parse_cli_args():
     parser.add_argument("--host", type=str, help="The host to run the service on. By default 0.0.0.0")
     parser.add_argument("--port", type=int, help="The port to run the service on. By default 50052")
     parser.add_argument("--workers", type=int, help="The number of workers to use. By default 4")
-    parser.add_argument("--use-ssl", type=bool, help="Enable SSL for the service. By default False")
+    parser.add_argument("--use-ssl", help="Enable SSL for the service. By default False")
     parser.add_argument("--ssl-keyfile", type=str, help="The SSL key file path")
     parser.add_argument("--ssl-certfile", type=str, help="The SSL certificate file path")
     return parser.parse_args()
-
 
 def substitute_empty_values(args):
     """Substitute the empty values with configuration values."""
     host = args.host or urlparse(CONFIG.flowkit_python_endpoint).hostname
     port = args.port or urlparse(CONFIG.flowkit_python_endpoint).port
     workers = args.workers or CONFIG.flowkit_python_workers
-    use_ssl = args.use_ssl or CONFIG.use_ssl
+    use_ssl = (args.use_ssl.lower() == 'true') if args.use_ssl is not None else CONFIG.use_ssl
     ssl_keyfile = args.ssl_keyfile or CONFIG.ssl_cert_private_key_file
     ssl_certfile = args.ssl_certfile or CONFIG.ssl_cert_public_key_file
     return host, port, workers, use_ssl, ssl_keyfile, ssl_certfile
-
 
 def main():
     """Run entrypoint for the FlowKit service."""
