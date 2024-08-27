@@ -59,8 +59,16 @@ class Config:
         """
         config_path = os.getenv("ALLIE_CONFIG_PATH", "config.yaml")
         self._yaml = self._load_config(config_path)
-        self.flowkit_python_api_key = self._yaml.get("FLOWKIT_PYTHON_API_KEY")
 
+        # Define the configuration variables to be parsed from the YAML file
+        self.flowkit_python_api_key = self._yaml.get("FLOWKIT_PYTHON_API_KEY")
+        self.flowkit_python_endpoint = self._yaml.get("FLOWKIT_PYTHON_ENDPOINT", "http://localhost:50052")
+        self.flowkit_python_workers = self._yaml.get("FLOWKIT_PYTHON_WORKERS", 4)
+        self.use_ssl = self._yaml.get("USE_SSL", False)
+        self.ssl_cert_public_key_file = self._yaml.get("SSL_CERT_PUBLIC_KEY_FILE")
+        self.ssl_cert_private_key_file = self._yaml.get("SSL_CERT_PRIVATE_KEY_FILE")
+
+        # Check the mandatory configuration variables
         if not self.flowkit_python_api_key:
             raise ValueError("FLOWKIT_PYTHON_API_KEY is missing in the configuration file.")
 
