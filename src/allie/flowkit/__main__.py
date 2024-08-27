@@ -49,8 +49,8 @@ def substitute_empty_values(args):
     port = args.port or urlparse(CONFIG.flowkit_python_endpoint).port
     workers = args.workers or CONFIG.flowkit_python_workers
     use_ssl = args.use_ssl or CONFIG.use_ssl
-    ssl_keyfile = args.ssl_keyfile or CONFIG.ssl_cert_public_key_file
-    ssl_certfile = args.ssl_certfile or CONFIG.ssl_cert_private_key_file
+    ssl_keyfile = args.ssl_keyfile or CONFIG.ssl_cert_private_key_file
+    ssl_certfile = args.ssl_certfile or CONFIG.ssl_cert_public_key_file
     return host, port, workers, use_ssl, ssl_keyfile, ssl_certfile
 
 
