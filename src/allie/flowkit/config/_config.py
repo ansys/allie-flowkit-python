@@ -22,9 +22,12 @@
 
 """Module for reading the configuration settings from a YAML file."""
 
+import json
 import os
 from pathlib import Path
 
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
 import yaml
 
 
@@ -67,6 +70,9 @@ class Config:
         self.use_ssl = self._yaml.get("USE_SSL", False)
         self.ssl_cert_public_key_file = self._yaml.get("SSL_CERT_PUBLIC_KEY_FILE")
         self.ssl_cert_private_key_file = self._yaml.get("SSL_CERT_PRIVATE_KEY_FILE")
+        self.extract_config_from_azure_key_vault = self._yaml.get("EXTRACT_CONFIG_FROM_AZURE_KEY_VAULT", False)
+        self.azure_managed_identity_id = self._yaml.get("AZURE_MANAGED_IDENTITY_ID")
+        self.azure_key_vault_name = self._yaml.get("AZURE_KEY_VAULT_NAME")
 
         # Check the mandatory configuration variables
         if not self.flowkit_python_api_key:
@@ -105,6 +111,62 @@ class Config:
                         return yaml.safe_load(file)
                 except FileNotFoundError:
                     raise FileNotFoundError("Configuration file not found at the default location.")
+
+    def get_config_from_azure_key_vault(self):
+        """Extract configuration from Azure Key Vault and set attributes."""
+        # Check if all required environment variables are set
+        if not self.azure_managed_identity_id:
+            raise ValueError(f"Environment variable for {self.azure_managed_identity_id} is not set")
+        if not self.azure_key_vault_name:
+            raise ValueError(f"Environment variable for {self.azure_key_vault_name} is not set")
+
+        # Create Key Vault URL
+        key_vault_url = f"https://{self.azure_key_vault_name}.vault.azure.net/"
+
+        # Create Managed Identity credential
+        # credential = ManagedIdentityCredential(client_id=self.azure_managed_identity)
+        credential = DefaultAzureCredential()
+
+        # Test the managed identity by getting a token
+        scope = "https://vault.azure.net/.default"
+        token = credential.get_token(scope)
+        if not token:
+            raise ValueError("Failed to get token from managed ID")
+
+        # Create Azure Key Vault SecretClient
+        client = SecretClient(vault_url=key_vault_url, credential=credential)
+
+        # List all secrets
+        secret_properties = client.list_properties_of_secrets()
+
+        # Reflect on the fields of the Config class
+        global_config_fields = {field: value for field, value in self.__dict__.items() if not field.startswith("_")}
+
+        # Iterate over all secrets
+        for secret_property in secret_properties:
+            secret_name = secret_property.name
+            secret_value = client.get_secret(secret_name).value
+
+            # Format the field name to match the secret name format
+            formatted_field_name = secret_name.replace("_", "").upper()
+
+            # Match secret names to Config class fields and set values
+            for field_name in global_config_fields:
+                # Remove underscores and convert to uppercase for matching
+                if field_name.replace("_", "").upper() == formatted_field_name:
+                    # Handle different field types
+                    field_type = type(getattr(self, field_name))
+                    print(field_name)
+                    if field_type is str:
+                        setattr(self, field_name, secret_value)
+                    elif field_type is bool:
+                        setattr(self, field_name, secret_value.lower() == "true")
+                    elif field_type is int:
+                        setattr(self, field_name, int(secret_value))
+                    elif field_type is list:
+                        setattr(self, field_name, json.loads(secret_value))
+                    else:
+                        raise ValueError(f"Unsupported field type: {field_type}")
 
 
 # Initialize the config object
