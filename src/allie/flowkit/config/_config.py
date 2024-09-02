@@ -128,7 +128,7 @@ class Config:
         key_vault_url = f"https://{self.azure_key_vault_name}.vault.azure.net/"
 
         # Create Managed Identity credential
-        credential = ManagedIdentityCredential(client_id=self.azure_managed_identity)
+        credential = ManagedIdentityCredential(client_id=self.azure_managed_identity_id)
 
         # Test the managed identity by getting a token
         scope = "https://vault.azure.net/.default"
