@@ -26,7 +26,7 @@ import json
 import os
 from pathlib import Path
 
-from azure.identity import DefaultAzureCredential
+from azure.identity import ManagedIdentityCredential
 from azure.keyvault.secrets import SecretClient
 import yaml
 
@@ -74,6 +74,10 @@ class Config:
         self.azure_managed_identity_id = self._yaml.get("AZURE_MANAGED_IDENTITY_ID")
         self.azure_key_vault_name = self._yaml.get("AZURE_KEY_VAULT_NAME")
 
+        # If azure key vault configured, read values from vault
+        if self.extract_config_from_azure_key_vault:
+            self._get_config_from_azure_key_vault()
+
         # Check the mandatory configuration variables
         if not self.flowkit_python_api_key:
             raise ValueError("FLOWKIT_PYTHON_API_KEY is missing in the configuration file.")
@@ -112,7 +116,7 @@ class Config:
                 except FileNotFoundError:
                     raise FileNotFoundError("Configuration file not found at the default location.")
 
-    def get_config_from_azure_key_vault(self):
+    def _get_config_from_azure_key_vault(self):
         """Extract configuration from Azure Key Vault and set attributes."""
         # Check if all required environment variables are set
         if not self.azure_managed_identity_id:
@@ -124,8 +128,7 @@ class Config:
         key_vault_url = f"https://{self.azure_key_vault_name}.vault.azure.net/"
 
         # Create Managed Identity credential
-        # credential = ManagedIdentityCredential(client_id=self.azure_managed_identity)
-        credential = DefaultAzureCredential()
+        credential = ManagedIdentityCredential(client_id=self.azure_managed_identity)
 
         # Test the managed identity by getting a token
         scope = "https://vault.azure.net/.default"
@@ -156,7 +159,6 @@ class Config:
                 if field_name.replace("_", "").upper() == formatted_field_name:
                     # Handle different field types
                     field_type = type(getattr(self, field_name))
-                    print(field_name)
                     if field_type is str:
                         setattr(self, field_name, secret_value)
                     elif field_type is bool:

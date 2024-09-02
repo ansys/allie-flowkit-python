@@ -52,20 +52,20 @@ def substitute_empty_values(args):
     CONFIG.use_ssl = (args.use_ssl.lower() == "true") if args.use_ssl is not None else CONFIG.use_ssl
     CONFIG.ssl_cert_private_key_file = args.ssl_keyfile or CONFIG.ssl_cert_private_key_file
     CONFIG.ssl_cert_public_key_file = args.ssl_certfile or CONFIG.ssl_cert_public_key_file
-    return host, port
+    return
 
 
 def main():
     """Run entrypoint for the FlowKit service."""
-    # Parse the command line arguments
-    args = parse_cli_args()
+    if not CONFIG.extract_config_from_azure_key_vault:
+        # Parse the command line arguments
+        args = parse_cli_args()
 
-    # Substitute the empty values with configuration values
-    host, port = substitute_empty_values(args)
+        # Substitute the empty values with configuration values
+        substitute_empty_values(args)
 
-    # If extract_config_from_azure_key_vault is enabled, extract the configuration from Azure Key Vault
-    if CONFIG.extract_config_from_azure_key_vault:
-        CONFIG.get_config_from_azure_key_vault()
+    host = urlparse(CONFIG.flowkit_python_endpoint).hostname
+    port = urlparse(CONFIG.flowkit_python_endpoint).port
 
     # Run the service
     uvicorn.run(
