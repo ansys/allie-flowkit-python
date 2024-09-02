@@ -47,29 +47,34 @@ def substitute_empty_values(args):
     """Substitute the empty values with configuration values."""
     host = args.host or urlparse(CONFIG.flowkit_python_endpoint).hostname
     port = args.port or urlparse(CONFIG.flowkit_python_endpoint).port
-    workers = args.workers or CONFIG.flowkit_python_workers
-    use_ssl = (args.use_ssl.lower() == "true") if args.use_ssl is not None else CONFIG.use_ssl
-    ssl_keyfile = args.ssl_keyfile or CONFIG.ssl_cert_private_key_file
-    ssl_certfile = args.ssl_certfile or CONFIG.ssl_cert_public_key_file
-    return host, port, workers, use_ssl, ssl_keyfile, ssl_certfile
+    CONFIG.flowkit_python_endpoint = f"http://{host}:{port}"
+    CONFIG.flowkit_python_workers = args.workers or CONFIG.flowkit_python_workers
+    CONFIG.use_ssl = (args.use_ssl.lower() == "true") if args.use_ssl is not None else CONFIG.use_ssl
+    CONFIG.ssl_cert_private_key_file = args.ssl_keyfile or CONFIG.ssl_cert_private_key_file
+    CONFIG.ssl_cert_public_key_file = args.ssl_certfile or CONFIG.ssl_cert_public_key_file
+    return
 
 
 def main():
     """Run entrypoint for the FlowKit service."""
-    # Parse the command line arguments
-    args = parse_cli_args()
+    if not CONFIG.extract_config_from_azure_key_vault:
+        # Parse the command line arguments
+        args = parse_cli_args()
 
-    # Substitute the empty values with configuration values
-    host, port, workers, use_ssl, ssl_keyfile, ssl_certfile = substitute_empty_values(args)
+        # Substitute the empty values with configuration values
+        substitute_empty_values(args)
+
+    host = urlparse(CONFIG.flowkit_python_endpoint).hostname
+    port = urlparse(CONFIG.flowkit_python_endpoint).port
 
     # Run the service
     uvicorn.run(
         "allie.flowkit.flowkit_service:flowkit_service",
         host=host,
         port=port,
-        workers=workers,
-        ssl_keyfile=ssl_keyfile if use_ssl else None,
-        ssl_certfile=ssl_certfile if use_ssl else None,
+        workers=CONFIG.flowkit_python_workers,
+        ssl_keyfile=CONFIG.ssl_cert_private_key_file if CONFIG.use_ssl else None,
+        ssl_certfile=CONFIG.ssl_cert_public_key_file if CONFIG.use_ssl else None,
     )
 
 
