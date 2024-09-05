@@ -45,9 +45,8 @@ def parse_cli_args():
 
 def substitute_empty_values(args):
     """Substitute the empty values with configuration values."""
-    host = args.host or urlparse(CONFIG.flowkit_python_endpoint).hostname
     port = args.port or urlparse(CONFIG.flowkit_python_endpoint).port
-    CONFIG.flowkit_python_endpoint = f"http://{host}:{port}"
+    CONFIG.flowkit_python_endpoint = f"http://0.0.0.0:{port}"
     CONFIG.flowkit_python_workers = args.workers or CONFIG.flowkit_python_workers
     CONFIG.use_ssl = (args.use_ssl.lower() == "true") if args.use_ssl is not None else CONFIG.use_ssl
     CONFIG.ssl_cert_private_key_file = args.ssl_keyfile or CONFIG.ssl_cert_private_key_file
@@ -64,13 +63,12 @@ def main():
         # Substitute the empty values with configuration values
         substitute_empty_values(args)
 
-    host = urlparse(CONFIG.flowkit_python_endpoint).hostname
     port = urlparse(CONFIG.flowkit_python_endpoint).port
 
     # Run the service
     uvicorn.run(
         "allie.flowkit.flowkit_service:flowkit_service",
-        host=host,
+        host="0.0.0.0",
         port=port,
         workers=CONFIG.flowkit_python_workers,
         ssl_keyfile=CONFIG.ssl_cert_private_key_file if CONFIG.use_ssl else None,
