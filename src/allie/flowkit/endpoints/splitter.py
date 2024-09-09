@@ -26,6 +26,7 @@ import base64
 import io
 
 from allie.flowkit.config._config import CONFIG
+from allie.flowkit.models.functions import FunctionCategory
 from allie.flowkit.models.splitter import SplitterRequest, SplitterResponse
 from fastapi import APIRouter, Header, HTTPException
 from langchain.text_splitter import PythonCodeTextSplitter, RecursiveCharacterTextSplitter
@@ -40,7 +41,7 @@ router = APIRouter()
 
 
 @router.post("/ppt", response_model=SplitterResponse)
-@category("data_extraction")
+@category(FunctionCategory.DATA_EXTRACTION)
 @display_name("Split PPT")
 async def split_ppt(request: SplitterRequest, api_key: str = Header(...)) -> SplitterResponse:
     """Endpoint for splitting text in a PowerPoint document into chunks.
@@ -59,7 +60,7 @@ async def split_ppt(request: SplitterRequest, api_key: str = Header(...)) -> Spl
 
 
 @router.post("/py", response_model=SplitterResponse)
-@category("data_extraction")
+@category(FunctionCategory.DATA_EXTRACTION)
 @display_name("Split Python Code")
 async def split_py(request: SplitterRequest, api_key: str = Header(...)) -> SplitterResponse:
     """Endpoint for splitting Python code into chunks.
@@ -83,7 +84,7 @@ async def split_py(request: SplitterRequest, api_key: str = Header(...)) -> Spli
 
 
 @router.post("/pdf", response_model=SplitterResponse)
-@category("data_extraction")
+@category(FunctionCategory.DATA_EXTRACTION)
 @display_name("Split PDF")
 async def split_pdf(request: SplitterRequest, api_key: str = Header(...)) -> SplitterResponse:
     """Endpoint for splitting text in a PDF document into chunks.

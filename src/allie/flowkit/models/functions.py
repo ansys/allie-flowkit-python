@@ -22,6 +22,7 @@
 
 """Module for defining the models used in the endpoints."""
 
+from enum import Enum
 from typing import Any
 
 from pydantic import BaseModel
@@ -59,3 +60,12 @@ class EndpointInfo(BaseModel):
     inputs: list[ParameterInfo]
     outputs: list[ParameterInfo]
     definitions: dict[str, Any]
+
+class FunctionCategory(Enum):
+    """Enum for function categories."""
+    
+    DATA_EXTRACTION = "data_extraction"
+    GENERIC = "generic"
+    KNOWLEDGE_DB = "knowledge_db"
+    LLM_HANDLER = "llm_handler"
+    ANSYS_GPT = "ansys_gpt"

@@ -96,6 +96,7 @@ Allie FlowKit Python can be run locally or as a Docker container. Follow the ins
    - Add your function code as an endpoint to a new Python file in the `allie/flowkit/endpoints` directory.
    - Use the `allie/flowkit/endpoints/splitter.py` file and its endpoints as an example.
    - Explicitly define the input and output of the function using Pydantic models, as these will be used by the Allie Agent to call the function.
+   - Add the category and display name of the function to the endpoint definition.
 
 2. **Add the models for the function:**
    - Create the models for the input and output of the function in the `allie/flowkit/models` directory.
@@ -147,7 +148,7 @@ Allie FlowKit Python can be run locally or as a Docker container. Follow the ins
     ```
 
 3. **Define your custom function:**
-- Add your function to ``custom_endpoint.py``, explicitly defining the input and output using Pydantic models.
+- Add your function to ``custom_endpoint.py``, explicitly defining the input and output using Pydantic models, and the category and display name of the function.
 
     **custom_endpoint.py**:
     ```python
@@ -156,6 +157,8 @@ Allie FlowKit Python can be run locally or as a Docker container. Follow the ins
 
 
     @router.post("/custom_function", response_model=CustomResponse)
+    @category(FunctionCategory.GENERIC)
+    @display_name("Custom Function")
     async def custom_function(request: CustomRequest) -> CustomResponse:
         """Endpoint for custom function.
 
