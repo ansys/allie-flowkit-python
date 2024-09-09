@@ -24,22 +24,32 @@
 
 from functools import wraps
 
+
 def category(value: str):
     """Decorator to add a category to the function."""
+
     def decorator(func):
         func.category = value
+
         @wraps(func)
         def wrapper(*args, **kwargs):
             return func(*args, **kwargs)
+
         return wrapper
+
     return decorator
+
 
 def display_name(value: str):
     """Decorator to add a display name to the function."""
+
     def decorator(func):
         func.display_name = value
+
         @wraps(func)
         def wrapper(*args, **kwargs):
             return func(*args, **kwargs)
+
         return wrapper
+
     return decorator

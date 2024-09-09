@@ -61,9 +61,10 @@ class EndpointInfo(BaseModel):
     outputs: list[ParameterInfo]
     definitions: dict[str, Any]
 
+
 class FunctionCategory(Enum):
     """Enum for function categories."""
-    
+
     DATA_EXTRACTION = "data_extraction"
     GENERIC = "generic"
     KNOWLEDGE_DB = "knowledge_db"
