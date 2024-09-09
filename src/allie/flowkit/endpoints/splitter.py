@@ -32,12 +32,16 @@ from langchain.text_splitter import PythonCodeTextSplitter, RecursiveCharacterTe
 from pdfminer.high_level import extract_text
 from pptx import Presentation
 
+from allie.flowkit.utils.decorators import category, display_name
+
 TOKEN_TO_CHARACTER_MULTIPLIER = 4
 
 router = APIRouter()
 
 
 @router.post("/ppt", response_model=SplitterResponse)
+@category("data_extraction")
+@display_name("Split PPT")
 async def split_ppt(request: SplitterRequest, api_key: str = Header(...)) -> SplitterResponse:
     """Endpoint for splitting text in a PowerPoint document into chunks.
 
@@ -55,6 +59,8 @@ async def split_ppt(request: SplitterRequest, api_key: str = Header(...)) -> Spl
 
 
 @router.post("/py", response_model=SplitterResponse)
+@category("data_extraction")
+@display_name("Split Python Code")
 async def split_py(request: SplitterRequest, api_key: str = Header(...)) -> SplitterResponse:
     """Endpoint for splitting Python code into chunks.
 
@@ -77,6 +83,8 @@ async def split_py(request: SplitterRequest, api_key: str = Header(...)) -> Spli
 
 
 @router.post("/pdf", response_model=SplitterResponse)
+@category("data_extraction")
+@display_name("Split PDF")
 async def split_pdf(request: SplitterRequest, api_key: str = Header(...)) -> SplitterResponse:
     """Endpoint for splitting text in a PDF document into chunks.
 

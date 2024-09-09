@@ -20,42 +20,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""Module for defining the models used in the endpoints."""
+"""Decorators module for function definitions."""
 
-from typing import Any
+from functools import wraps
 
-from pydantic import BaseModel
+def category(value: str):
+    """Decorator to add a category to the function."""
+    def decorator(func):
+        func.category = value
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
 
-
-class ParameterInfo(BaseModel):
-    """Parameter information model.
-
-    Parameters
-    ----------
-    BaseModel : pydantic.BaseModel
-        The base model for the parameter information
-
-    """
-
-    name: str
-    type: str
-
-
-class EndpointInfo(BaseModel):
-    """Endpoint information model.
-
-    Parameters
-    ----------
-    BaseModel : pydantic.BaseModel
-        The base model for the endpoint information
-
-    """
-
-    name: str
-    path: str
-    category: str
-    display_name: str
-    description: str
-    inputs: list[ParameterInfo]
-    outputs: list[ParameterInfo]
-    definitions: dict[str, Any]
+def display_name(value: str):
+    """Decorator to add a display name to the function."""
+    def decorator(func):
+        func.display_name = value
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
