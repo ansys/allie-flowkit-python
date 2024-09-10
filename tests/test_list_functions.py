@@ -43,7 +43,9 @@ async def test_list_functions():
             "path": "/splitter/ppt",
             "category": "data_extraction",
             "display_name": "Split PPT",
-            "description": "Endpoint for splitting text in a PowerPoint document into chunks.\n\nParameters\n----------\nrequest : SplitterRequest\n    An object containing 'document_content' in Base64,\n    'chunk_size', and 'chunk_overlap'\napi_key : str\n    The API key for authentication.",
+            "description": """Endpoint for splitting text in a PowerPoint document into chunks.\n\nParameters\n----------\nrequest :
+            SplitterRequest\n    An object containing 'document_content' in Base64,\n    'chunk_size', and 'chunk_overlap'\napi_key : str\n
+            The API key for authentication.""",
             "inputs": [
                 {"name": "document_content", "type": "string(binary)"},
                 {"name": "chunk_size", "type": "integer"},
@@ -57,7 +59,9 @@ async def test_list_functions():
             "path": "/splitter/py",
             "category": "data_extraction",
             "display_name": "Split Python Code",
-            "description": "Endpoint for splitting Python code into chunks.\n\nParameters\n----------\nrequest : SplitterRequest\n    An object containing 'document_content' in Base64,\n    'chunk_size', and 'chunk_overlap'\napi_key : str\n    The API key for authentication.\n\nReturns\n-------\nSplitterResponse\n    An object containing a list of text chunks.",
+            "description": """Endpoint for splitting Python code into chunks.\n\nParameters\n----------\nrequest : SplitterRequest\n
+            An object containing 'document_content' in Base64,\n    'chunk_size', and 'chunk_overlap'\napi_key : str\n
+            The API key for authentication.\n\nReturns\n-------\nSplitterResponse\n    An object containing a list of text chunks.""",
             "inputs": [
                 {"name": "document_content", "type": "string(binary)"},
                 {"name": "chunk_size", "type": "integer"},
@@ -71,7 +75,9 @@ async def test_list_functions():
             "path": "/splitter/pdf",
             "category": "data_extraction",
             "display_name": "Split PDF",
-            "description": "Endpoint for splitting text in a PDF document into chunks.\n\nParameters\n----------\nrequest : SplitterRequest\n    An object containing 'document_content' in Base64,\n    'chunk_size', and 'chunk_overlap'.\napi_key : str\n    The API key for authentication.\n\nReturns\n-------\nSplitterResponse\n    An object containing a list of text chunks.",
+            "description": """Endpoint for splitting text in a PDF document into chunks.\n\nParameters\n----------\nrequest :
+            SplitterRequest\n    An object containing 'document_content' in Base64,\n    'chunk_size', and 'chunk_overlap'.\napi_key :
+            str\n    The API key for authentication.\n\nReturns\n-------\nSplitterResponse\n    An object containing a list of text chunks.""",
             "inputs": [
                 {"name": "document_content", "type": "string(binary)"},
                 {"name": "chunk_size", "type": "integer"},
