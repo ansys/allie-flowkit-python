@@ -20,53 +20,45 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""Module for defining the models used in the endpoints."""
+"""Decorators module for function definitions."""
 
-from enum import Enum
-from typing import Any
-
-from pydantic import BaseModel
+import asyncio
+from functools import wraps
 
 
-class ParameterInfo(BaseModel):
-    """Parameter information model.
+def category(value: str):
+    """Decorator to add a category to the function."""
 
-    Parameters
-    ----------
-    BaseModel : pydantic.BaseModel
-        The base model for the parameter information
+    def decorator(func):
+        func.category = value
 
-    """
+        @wraps(func)
+        async def async_wrapper(*args, **kwargs):
+            # Check if function is async
+            if asyncio.iscoroutinefunction(func):
+                return await func(*args, **kwargs)
+            else:
+                return func(*args, **kwargs)
 
-    name: str
-    type: str
+        return async_wrapper
 
-
-class EndpointInfo(BaseModel):
-    """Endpoint information model.
-
-    Parameters
-    ----------
-    BaseModel : pydantic.BaseModel
-        The base model for the endpoint information
-
-    """
-
-    name: str
-    path: str
-    category: str
-    display_name: str
-    description: str
-    inputs: list[ParameterInfo]
-    outputs: list[ParameterInfo]
-    definitions: dict[str, Any]
+    return decorator
 
 
-class FunctionCategory(Enum):
-    """Enum for function categories."""
+def display_name(value: str):
+    """Decorator to add a display name to the function."""
 
-    DATA_EXTRACTION = "data_extraction"
-    GENERIC = "generic"
-    KNOWLEDGE_DB = "knowledge_db"
-    LLM_HANDLER = "llm_handler"
-    ANSYS_GPT = "ansys_gpt"
+    def decorator(func):
+        func.display_name = value
+
+        @wraps(func)
+        async def async_wrapper(*args, **kwargs):
+            # Check if function is async
+            if asyncio.iscoroutinefunction(func):
+                return await func(*args, **kwargs)
+            else:
+                return func(*args, **kwargs)
+
+        return async_wrapper
+
+    return decorator

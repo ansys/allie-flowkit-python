@@ -222,12 +222,22 @@ def extract_endpoint_info(function_map: dict[str, Any], routes: list[APIRoute]) 
                 output_definitions = get_definitions_from_return_type(return_type) if return_type else {}
                 definitions = {**input_definitions, **output_definitions}
 
+                # Extract category and display name from decorators
+                category = getattr(route.endpoint, "category", "Uncategorized")
+                display_name = getattr(route.endpoint, "display_name", func_name)
+
+                # Extract the description from the docstring
+                description = inspect.getdoc(route.endpoint) or "No description available"
+
                 endpoint_info = EndpointInfo(
                     name=func_name,
                     path=route.path,
                     inputs=inputs,
                     outputs=outputs,
                     definitions=definitions,
+                    category=category,
+                    display_name=display_name,
+                    description=description,
                 )
                 endpoint_list.append(endpoint_info)
     return endpoint_list
