@@ -121,7 +121,7 @@ class Config:
         # Get environment variables
         azure_managed_identity_id = os.getenv(self.azure_managed_identity_id)
         azure_key_vault_name = os.getenv(self.azure_key_vault_name)
-        
+
         # Check if all required environment variables are set
         if not azure_managed_identity_id:
             raise ValueError(f"Environment variable for {self.azure_managed_identity_id} is not set")
