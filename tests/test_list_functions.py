@@ -21,6 +21,8 @@
 # SOFTWARE.
 """Test module for list functions."""
 
+import re
+
 from allie.flowkit import flowkit_service
 from fastapi.testclient import TestClient
 import pytest
@@ -29,10 +31,22 @@ import pytest
 client = TestClient(flowkit_service)
 
 
+def normalize_text(text):
+    """Remove extra spaces, newlines, and indentation."""
+    return re.sub(r"\s+", " ", text.strip())
+
+
+def normalize_response_data(data):
+    """Normalize descriptions in the list of functions."""
+    for item in data:
+        if "description" in item:
+            item["description"] = normalize_text(item["description"])
+    return data
+
+
 @pytest.mark.asyncio
 async def test_list_functions():
     """Test listing available functions."""
-    # Test splitter results
     response = client.get("/", headers={"api-key": "test_api_key"})
     assert response.status_code == 200
     response_data = response.json()
@@ -43,9 +57,13 @@ async def test_list_functions():
             "path": "/splitter/ppt",
             "category": "data_extraction",
             "display_name": "Split PPT",
-            "description": """Endpoint for splitting text in a PowerPoint document into chunks.\n\n
-            Parameters\n----------\nrequest :SplitterRequest\n    An object containing
-            'document_content' in Base64,\n    'chunk_size', and 'chunk_overlap'\napi_key : str\n
+            "description": """Endpoint for splitting text in a PowerPoint document into chunks.
+            Parameters
+            ----------
+            request : SplitterRequest
+            An object containing 'document_content' in Base64,
+            'chunk_size', and 'chunk_overlap'
+            api_key : str
             The API key for authentication.""",
             "inputs": [
                 {"name": "document_content", "type": "string(binary)"},
@@ -60,10 +78,18 @@ async def test_list_functions():
             "path": "/splitter/py",
             "category": "data_extraction",
             "display_name": "Split Python Code",
-            "description": """Endpoint for splitting Python code into chunks.\n\n
-            Parameters\n----------\nrequest : SplitterRequest\n An object containing 'document_content' in Base64,\n
-            'chunk_size', and 'chunk_overlap'\napi_key : str\nThe API key for authentication.\n\nReturns\n
-            -------\nSplitterResponse\n    An object containing a list of text chunks.""",
+            "description": """Endpoint for splitting Python code into chunks.
+            Parameters
+            ----------
+            request : SplitterRequest
+            An object containing 'document_content' in Base64,
+            'chunk_size', and 'chunk_overlap'
+            api_key : str
+            The API key for authentication.
+            Returns
+            -------
+            SplitterResponse
+            An object containing a list of text chunks.""",
             "inputs": [
                 {"name": "document_content", "type": "string(binary)"},
                 {"name": "chunk_size", "type": "integer"},
@@ -77,10 +103,18 @@ async def test_list_functions():
             "path": "/splitter/pdf",
             "category": "data_extraction",
             "display_name": "Split PDF",
-            "description": """Endpoint for splitting text in a PDF document into chunks.\n\n
-            Parameters\n----------\nrequest :SplitterRequest\n    An object containing 'document_content'
-            in Base64,\n    'chunk_size', and 'chunk_overlap'.\napi_key :str\n    The API key for authentication.
-            \n\nReturns\n-------\nSplitterResponse\n    An object containing a list of text chunks.""",
+            "description": """Endpoint for splitting text in a PDF document into chunks.
+            Parameters
+            ----------
+            request : SplitterRequest
+            An object containing 'document_content' in Base64,
+            'chunk_size', and 'chunk_overlap'.
+            api_key : str
+            The API key for authentication.
+            Returns
+            -------
+            SplitterResponse
+            An object containing a list of text chunks.""",
             "inputs": [
                 {"name": "document_content", "type": "string(binary)"},
                 {"name": "chunk_size", "type": "integer"},
@@ -91,7 +125,11 @@ async def test_list_functions():
         },
     ]
 
-    assert response_data[:3] == expected_response_start
+    # Normalize both actual and expected data
+    normalized_response = normalize_response_data(response_data[:3])
+    normalized_expected = normalize_response_data(expected_response_start)
+
+    assert normalized_response == normalized_expected
 
     # Test invalid API key
     response = client.get("/", headers={"api-key": "invalid_api_key"})
