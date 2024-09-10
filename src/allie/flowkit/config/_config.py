@@ -118,17 +118,21 @@ class Config:
 
     def _get_config_from_azure_key_vault(self):
         """Extract configuration from Azure Key Vault and set attributes."""
+        # Get environment variables
+        azure_managed_identity_id = os.getenv(self.azure_managed_identity_id)
+        azure_key_vault_name = os.getenv(self.azure_key_vault_name)
+        
         # Check if all required environment variables are set
-        if not self.azure_managed_identity_id:
+        if not azure_managed_identity_id:
             raise ValueError(f"Environment variable for {self.azure_managed_identity_id} is not set")
-        if not self.azure_key_vault_name:
+        if not azure_key_vault_name:
             raise ValueError(f"Environment variable for {self.azure_key_vault_name} is not set")
 
         # Create Key Vault URL
-        key_vault_url = f"https://{self.azure_key_vault_name}.vault.azure.net/"
+        key_vault_url = f"https://{azure_key_vault_name}.vault.azure.net/"
 
         # Create Managed Identity credential
-        credential = ManagedIdentityCredential(client_id=self.azure_managed_identity_id)
+        credential = ManagedIdentityCredential(client_id=azure_managed_identity_id)
 
         # Test the managed identity by getting a token
         scope = "https://vault.azure.net/.default"
