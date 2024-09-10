@@ -64,15 +64,15 @@ class Config:
         self._yaml = self._load_config(config_path)
 
         # Define the configuration variables to be parsed from the YAML file
-        self.flowkit_python_api_key = self._yaml.get("FLOWKIT_PYTHON_API_KEY")
-        self.flowkit_python_endpoint = self._yaml.get("FLOWKIT_PYTHON_ENDPOINT", "http://localhost:50052")
-        self.flowkit_python_workers = self._yaml.get("FLOWKIT_PYTHON_WORKERS", 4)
-        self.use_ssl = self._yaml.get("USE_SSL", False)
-        self.ssl_cert_public_key_file = self._yaml.get("SSL_CERT_PUBLIC_KEY_FILE")
-        self.ssl_cert_private_key_file = self._yaml.get("SSL_CERT_PRIVATE_KEY_FILE")
-        self.extract_config_from_azure_key_vault = self._yaml.get("EXTRACT_CONFIG_FROM_AZURE_KEY_VAULT", False)
-        self.azure_managed_identity_id = self._yaml.get("AZURE_MANAGED_IDENTITY_ID")
-        self.azure_key_vault_name = self._yaml.get("AZURE_KEY_VAULT_NAME")
+        self.flowkit_python_api_key = str(self._yaml.get("FLOWKIT_PYTHON_API_KEY", ""))
+        self.flowkit_python_endpoint = str(self._yaml.get("FLOWKIT_PYTHON_ENDPOINT", "http://localhost:50052"))
+        self.flowkit_python_workers = int(self._yaml.get("FLOWKIT_PYTHON_WORKERS", 4))
+        self.use_ssl = bool(self._yaml.get("USE_SSL", False))
+        self.ssl_cert_public_key_file = str(self._yaml.get("SSL_CERT_PUBLIC_KEY_FILE", ""))
+        self.ssl_cert_private_key_file = str(self._yaml.get("SSL_CERT_PRIVATE_KEY_FILE", ""))
+        self.extract_config_from_azure_key_vault = bool(self._yaml.get("EXTRACT_CONFIG_FROM_AZURE_KEY_VAULT", False))
+        self.azure_managed_identity_id = str(self._yaml.get("AZURE_MANAGED_IDENTITY_ID", ""))
+        self.azure_key_vault_name = str(self._yaml.get("AZURE_KEY_VAULT_NAME", ""))
 
         # If azure key vault configured, read values from vault
         if self.extract_config_from_azure_key_vault:
