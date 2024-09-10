@@ -28,6 +28,7 @@ from functools import wraps
 
 def category(value: str):
     """Decorator to add a category to the function."""
+
     def decorator(func):
         func.category = value
 
@@ -46,6 +47,7 @@ def category(value: str):
 
 def display_name(value: str):
     """Decorator to add a display name to the function."""
+
     def decorator(func):
         func.display_name = value
 
