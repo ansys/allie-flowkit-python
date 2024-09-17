@@ -44,10 +44,10 @@ tests = [
     "pytest-asyncio >= 0.23.8,<1",
 ]
 doc = [
-    "ansys-sphinx-theme==1.0.5",
+    "ansys-sphinx-theme==1.0.9",
     "numpydoc==1.8.0",
     "sphinx==8.0.2",
-    "sphinx-autoapi==3.2.1",
+    "sphinx-autoapi==3.3.1",
     "sphinx-copybutton==0.5.2",
     "sphinx_design==0.6.1",
     "sphinx-gallery==0.17.1",
