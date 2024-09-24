@@ -6,6 +6,7 @@ on:
       - "*"
     branches:
       - main
+      - vupadhya/mendallie
 
 env:
   MAIN_PYTHON_VERSION: '3.12'
@@ -48,6 +49,35 @@ jobs:
           library-name: ${{ env.PACKAGE_NAME }}
           operating-system: ${{ matrix.os }}
           python-version: ${{ matrix.python-version }}
+      
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+           java-version: '11'
+           distribution: 'adopt'
+
+      - name: Mend Unified Agent Scan
+        env:
+          WS_PRODUCTNAME: 'AnsysAllie'
+          WS_PROJECTNAME: ${{github.event.repository.name}}
+          WS_GENERATEPROJECTDETAILSJSON: true
+          WS_GENERATESCANREPORT: true
+          WS_FILESYSTEMSCAN: true
+          WS_CHECKPOLICIES: true
+          WS_FORCECHECKALLDEPENDENCIES: true
+          WS_SCANREPORTFILENAMEFORMAT: static
+          WS_FORCEUPDATE_FAILBUILDONPOLICYVIOLATION : true
+          WS_PYTHON_REQUIREMENTSFILEINCLUDES: "pyproject.toml"
+        run: |
+          echo Downloading Mend Unified Agent
+          curl -LJO https://unified-agent.s3.amazonaws.com/wss-unified-agent.jar
+          if [[ "$(curl -sL https://unified-agent.s3.amazonaws.com/wss-unified-agent.jar.sha256)" != "$(sha256sum wss-unified-agent.jar)" ]] ; then
+            echo "Integrity Check Failed"
+          else
+            echo "Integrity Check Passed"
+            echo Starting Unified Agent Scan
+            java -jar wss-unified-agent.jar -loglevel debug
+          fi
 
   docs-style:
     name: Documentation Style Check
