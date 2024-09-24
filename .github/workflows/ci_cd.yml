@@ -49,7 +49,11 @@ jobs:
           library-name: ${{ env.PACKAGE_NAME }}
           operating-system: ${{ matrix.os }}
           python-version: ${{ matrix.python-version }}
-
+   
+  mendscan-sca:
+    name: Mend Scan
+    runs-on: ubuntu-latest
+    steps:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
