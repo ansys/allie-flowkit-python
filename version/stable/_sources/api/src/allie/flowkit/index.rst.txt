@@ -1,0 +1,154 @@
+
+
+
+
+
+
+The ``src.allie.flowkit`` library
+=================================
+
+.. py:module:: src.allie.flowkit
+
+
+Summary
+-------
+
+
+
+
+
+
+
+
+.. py:currentmodule:: flowkit
+.. tab-set::
+
+    .. tab-item:: Subpackages
+
+        .. list-table::
+          :header-rows: 0
+          :widths: auto
+
+
+          * - :py:obj:`~src.allie.flowkit.config`
+            - Configuration package for the application.
+
+
+          * - :py:obj:`~src.allie.flowkit.endpoints`
+            - Endpoints package responsible for defining the endpoints.
+
+
+          * - :py:obj:`~src.allie.flowkit.models`
+            - Models package used to define the data models.
+
+
+          * - :py:obj:`~src.allie.flowkit.utils`
+            - Utils module.
+
+
+
+    .. tab-item:: Submodules
+
+        .. list-table::
+          :header-rows: 0
+          :widths: auto
+
+
+          * - :py:obj:`~src.allie.flowkit.__main__`
+            - Main module for the FlowKit service.
+
+
+          * - :py:obj:`~src.allie.flowkit.fastapi_utils`
+            - Utils module for FastAPI related operations.
+
+
+          * - :py:obj:`~src.allie.flowkit.flowkit_service`
+            - Module for the Allie Flowkit service.
+
+
+
+
+
+
+
+
+    .. tab-item:: Attributes
+
+        .. list-table::
+          :header-rows: 0
+          :widths: auto
+
+
+          * - :py:obj:`~__version__`
+            - 
+
+
+
+
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+   :hidden:
+
+    <span class="nf nf-md-package"></span> config</api/src/allie/flowkit/config/index>
+    <span class="nf nf-md-package"></span> endpoints</api/src/allie/flowkit/endpoints/index>
+    <span class="nf nf-md-package"></span> models</api/src/allie/flowkit/models/index>
+    <span class="nf nf-md-package"></span> utils</api/src/allie/flowkit/utils/index>
+
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+   :hidden:
+
+    <span class="nf nf-fa-file"></span> __main__</api/src/allie/flowkit/__main__/index>
+    <span class="nf nf-fa-file"></span> fastapi_utils</api/src/allie/flowkit/fastapi_utils/index>
+    <span class="nf nf-fa-file"></span> flowkit_service</api/src/allie/flowkit/flowkit_service/index>
+
+
+
+
+
+
+
+
+
+
+
+Description
+-----------
+
+
+App package responsible for creating the FastAPI app.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+
+
+
+
+
+Module detail
+-------------
+
+.. py:data:: __version__
+
+
+

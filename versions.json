@@ -1,0 +1,12 @@
+[
+  {
+    "name": "dev",
+    "version": "dev",
+    "url": "https://ansys.github.io/allie-flowkit-python/version/dev/"
+  },
+  {
+    "name": "0.1 (stable)",
+    "version": "0.1",
+    "url": "https://ansys.github.io/allie-flowkit-python/version/stable/"
+  }
+]
