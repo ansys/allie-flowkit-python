@@ -12,6 +12,8 @@ env:
   MAIN_PYTHON_VERSION: '3.12'
   DOCUMENTATION_CNAME: ansys.github.io/allie-flowkit-python
   PACKAGE_NAME: allie-flowkit-python
+  DEPLOY_TAG_TEST: 'false'
+  DEPLOY_TAG_PROD: 'false'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -198,6 +200,7 @@ jobs:
             echo "X=${PARTS[0]}" >> $GITHUB_ENV
             echo "Y=${PARTS[1]}" >> $GITHUB_ENV
             echo "Z=${PARTS[2]}" >> $GITHUB_ENV
+            echo "DEPLOY_TAG_TEST=true" >> $GITHUB_ENV
           else
             echo "Invalid tag format. Expected vX.Y.Z but got ${{ github.ref_name }}"
             exit 1
@@ -227,3 +230,22 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+
+  upload_tag_files:
+    name: Upload tag files to Artifactory
+    runs-on: ubuntu-latest
+    if: env.IS_DEV_TAG == 'false'
+    steps:
+    - name: Update TEST deployment tag file in Artifactory
+      if: env.DEPLOY_TAG_TEST == 'true'
+      run: |
+        echo "${{ github.ref_name }}" > agent.txt
+        curl -u{{ secrets.ARTIFACTORY_4CPBUUSER }} \
+          -T agent.txt "https://artifactory.ansys.com/artifactory/Allie_TEST_ImageTags/agent.txt"	
+
+    - name: Update PROD deployment tag file in Artifactory
+      if: env.DEPLOY_TAG_PROD == 'true'
+      run: |
+        echo "${{ github.ref_name }}" > agent.txt
+        curl -u{{ secrets.ARTIFACTORY_4CPBUUSER }} \
+          -T agent.txt "https://artifactory.ansys.com/artifactory/Allie_PROD_ImageTags/agent.txt"	
